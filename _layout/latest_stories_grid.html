@@ -1,0 +1,41 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+?>
+
+<!--latest articles-->
+<section class="uni-container uni-blog-latest-news"
+         uni-component="loadMore"
+         uni-options="{
+                          'endpoint':'<?php echo weblog_api_endpoint($user, $weblog, 'api/v1/pages/'.$api_endpoint); ?>',
+                          'paginate_by':3,
+                          'next_page':1,
+                          'offset':0,
+                          'template': 'newsItem',
+                          'querySelector': 'div.latest-news-list',
+                          'load_first_page': true
+                      }">
+    <!--products navigation header content-->
+    <div class="uni-wrapper">
+
+        <h1>Latest Stories</h1>
+        
+        <style type="text/css">
+            .latest-news-list a {
+              background-color: #777 !important;
+            }
+        </style>
+        <div class="uni-blog-latest-news-content">
+            <nav>
+                <div class="latest-news-list"
+                     uni-component="analytics"
+                     data-analytics="{
+                                     'category': 'article lead',
+                                     'action': 'featured product - latest story',
+                                     'label': 'article: {slug}'
+                                     }">
+
+                </div>
+            </nav>
+        </div>
+    </div>
+</section>

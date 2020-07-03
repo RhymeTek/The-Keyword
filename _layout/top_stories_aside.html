@@ -1,0 +1,91 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+?>
+
+<section class="uni-anchor-article">
+    <a href="<?php echo weblog_url($user, $weblog, $post_item['slug'].'~'.$post_item['post_id']); ?>"
+       class="uni-blog-landing-header-content override-color"
+       uni-component="analytics"
+       data-analytics="{
+                       'category': 'article lead',
+                       'action': 'top stories - featured',
+                       'label': 'article: {slug}'
+                       }">
+
+        <figure class="">
+            <picture>
+
+                <!-- <source media="(max-width: 540px) and (max-resolution: 1.5dppx)"
+                        sizes="270px"
+                        srcset="https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Gmail_iOS_Hero_Image_11.7.16.2e16d0ba.fill-270x270.jpg 270w">
+            
+                <source media="(max-width: 540px) and (min-resolution: 1.5dppx)"
+                        sizes="540px"
+                        srcset="https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Gmail_iOS_Hero_Image_11.7.16.2e16d0ba.fill-540x540.jpg 540w">
+            
+                <source media="(max-resolution: 1.5dppx)"
+                        sizes="400px"
+                        srcset="https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Gmail_iOS_Hero_Image_11.7.16.2e16d0ba.fill-400x400.jpg 400w">
+            
+                <source media="(min-resolution: 1.5dppx)"
+                        sizes="800px"
+                        srcset="https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Gmail_iOS_Hero_Image_11.7.16.2e16d0ba.fill-800x800.jpg 800w">
+            
+
+                <img src="https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Gmail_iOS_Hero_Image_11.7.16.2e16d0ba.fill-800x800.jpg"
+
+                    alt="Hero Image_New Gmail App on iOS_11.7.16"
+             
+                     sizes="(max-width: 540px) 270px, (max-width: 540px) 540px,  400px,  800px"
+                     srcset="https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Gmail_iOS_Hero_Image_11.7.16.2e16d0ba.fill-270x270.jpg 270w, https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Gmail_iOS_Hero_Image_11.7.16.2e16d0ba.fill-540x540.jpg 540w, https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Gmail_iOS_Hero_Image_11.7.16.2e16d0ba.fill-400x400.jpg 400w, https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Gmail_iOS_Hero_Image_11.7.16.2e16d0ba.fill-800x800.jpg 800w">
+ -->
+                <?php
+                if (!empty($post_item['thumbnail_url']))
+                {
+                    ?>
+                    <img src="<?php echo $post_item['thumbnail_url']; ?>">
+                    <?php
+                }
+                ?>
+                
+            </picture>
+        </figure>
+
+        <section>
+            <div class="uni-blog-landing-header">
+                <!--date-->
+                <time datetime="<?php echo date('Y-m-d H:m', strtotime($post_item['published'])); ?>">
+                    <?php echo time_elapsed($post_item['published']); ?>
+                </time>
+
+                <!--Product brand-->
+                <span>
+                    <?php echo service_name($post_item['service'], $post_item['kind']); ?>
+                </span>
+
+                <!--Comments-->
+                <span></span>
+            </div>
+
+            <?php
+            if (!empty($post_item['title']))
+            {
+                ?>
+                <h1><?php echo $post_item['title']; ?></h1>
+                <?php
+            }
+            ?>
+
+            <?php
+            if (!empty($post_item['description']))
+            {
+                ?>
+                <p class="hide-small">
+                    <?php echo $post_item['description']; ?>
+                </p>
+                <?php
+            }
+            ?>
+        </section>
+    </a>
+</section>

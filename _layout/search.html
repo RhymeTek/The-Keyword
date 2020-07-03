@@ -1,0 +1,198 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+?>
+
+<!doctype html>
+
+    <?php
+    $data = [
+        'title'         => 'Search | '.$user['full_name'],
+        'description'   => 'Search posts by'.$user['full_name'],
+        'canonical_url' => weblog_url($user, $weblog, 'search'),
+        'image_url'     => $user['profile_image_url'],
+    ];
+    $this->view('weblog/head', $data);
+    ?>
+
+    <body class="template-searchresults" uni-component="externalLinks">
+        <div uni-component="timesince"></div>
+        
+        <div data-layer="{
+            'slug': 'search',
+            'contentType': 'search page',
+        }"></div>
+
+        <?php $this->view('weblog/header'); ?>
+
+        <main uni-component="analytics"
+              uni-options="{
+                'trackingEvent': 'scroll'
+              }">
+
+            <section class="uni-search-results"
+                     uni-controller="articleSearchController"
+                     uni-options="{
+                        'username':'<?php echo $user['username']; ?>',
+                        'base_url':'<?php echo weblog_url($user, $weblog); ?>',
+                        'endpoint':'<?php echo weblog_api_endpoint($user, $weblog, 'api/v1/search/'.$user['username']); ?>'
+                     }">
+                <div class="uni-search-count"
+                     uni-component="searchForm"
+                     uni-options="{
+                        'searchUrl':'<?php echo weblog_url($user, $weblog, 'search'); ?>'
+                     }">
+                    <div class="uni-wrapper">
+                        <div class="uni-search-results-content">
+                            <div class="uni-search-results-counter-container">
+                                <span class="uni-search-results-counter"></span> matching results for “<span class="uni-search-results-keyword"></span>”
+                            </div>
+
+                            <div class="uni-search-no-results">
+
+                                Oops, your search for “<span class="uni-search-results-keyword"></span>” didn't return any results.
+                                
+                            </div>
+
+                            <div class="uni-search-results-filters">
+
+                                <!-- <div class="uni-menu uni-dropdown" name="uni-search-filters-product" uni-component="dropdown">
+                                    <button data-expanded="true" aria-haspopup="false" aria-expanded="true">
+                                        All Products
+                                    </button>
+                                    <ul>
+                                        <li tabindex="0">
+                                            <span>
+                                                All Products
+                                            </span>
+                                        </li>
+
+                                        <li class="uni-dropdown-selected-item" data="" tabindex="0">
+                                            <span>All Products</span>
+                                        </li>
+                                    
+                                        <li data="android" tabindex="0">
+                                            <span>Android</span>
+                                        </li>
+                                        <li data="android enterprise" tabindex="0">
+                                            <span>Android enterprise</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="uni-menu uni-dropdown" name="uni-search-filters-topic" uni-component="dropdown">
+                                    <button data-expanded="true" aria-haspopup="false" aria-expanded="true">
+                                        All Topics
+                                    </button>
+                                    <ul>
+                                        <li tabindex="0">
+                                            <span>
+                                                All Topics
+                                            </span>
+                                        </li>
+                                        
+                                        <li class="uni-dropdown-selected-item" data="" tabindex="0">
+                                            <span>All Topics</span>
+                                        </li>
+
+                                        <li data="ads" tabindex="0">
+                                            <span>Ads</span>
+                                        </li>
+                                        <li data="alphabet" tabindex="0">
+                                            <span>Alphabet</span>
+                                        </li>
+                                        <li data="arts &amp; culture" tabindex="0">
+                                            <span>Arts &amp; Culture</span>
+                                        </li>
+                                    </ul>
+                                </div> -->
+
+                                <div class="uni-menu uni-dropdown" name="uni-search-filters-date" uni-component="dropdown">
+                                    <button data-expanded="true" aria-haspopup="false" aria-expanded="true">
+                                        All dates
+                                    </button>
+                                    <ul>
+                                        <li tabindex="0">
+                                            <span>
+                                                All dates
+                                            </span>
+                                        </li>
+                                        
+                                        <li class="uni-dropdown-selected-item" data="" tabindex="0">
+                                            <span>All dates</span>
+                                        </li>
+
+                                        <li data="week" tabindex="0">
+                                            <span>Last week</span>
+                                        </li>
+                                        <li data="month" tabindex="0">
+                                            <span>Last month</span>
+                                        </li>
+                                        <li data="year" tabindex="0">
+                                            <span>Last year</span>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <section class="uni-wrapper">
+                    <div class="uni-search-topic-cards">
+                        <div class="uni-search-topic-card">
+                            <span>Topic</span>
+                            <h4>Small business</h4>
+                        </div>
+                        <div class="uni-search-topic-card">
+                            <span>Topic</span>
+                            <h4>Small business</h4>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="uni-article-list uni-latest-articles uni-load-more"
+                         uni-component="loadMore"
+                         uni-options="{
+                                          'endpoint':'<?php echo weblog_api_endpoint($user, $weblog, 'api/v1/search/'.$user['username']); ?>',
+                                          'paginate_by':12,
+                                          'next_page':1,
+                                          'offset':0,
+                                          'load_first_page': false
+                                      }"
+                         >
+                    <div class="uni-wrapper uni-wrapper-medium-full-width">
+                        <nav uni-component="analytics"
+                             uni-options="{'update': 'uniblog.event.loadMore.onDataIsReady'}"
+                             data-analytics="{
+                                             'category': 'article lead',
+                                             'action': 'search result',
+                                             'label': 'article: {slug}'
+                                             }"
+                             >
+                        </nav>
+                    </div>
+
+                    <div class="uni-load-more-nav">
+                        <button class="uni-load-more-button"
+                                uni-component="analytics"
+                                data-analytics="{
+                                                'category': 'interaction',
+                                                'action': 'load more search results'
+                                                }"
+                                >
+                            <img src="<?php echo asset_url('weblog/images/loader.2a19596f729d.gif'); ?>"
+                                 alt="Loading more stories"/>
+                            <span>Load more stories</span>
+                            <div class="uni-load-more-transition"></div>
+                        </button>
+                    </div>
+                </section>
+
+                <section class="uni-no-results"></section>
+
+            </section>
+        </main>
+
+        <?php $this->view('weblog/footer'); ?>
+    </body>
+</html>

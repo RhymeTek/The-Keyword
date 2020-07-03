@@ -1,0 +1,44 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+?>
+
+<?php
+if (!empty($post['item']['keywords']))
+{
+    $keywords = explode(',', $post['item']['keywords']);
+    ?>
+    <!--posted in-->
+
+    <!--tags-->
+    <div class="uni-blog-article-tags">
+        <span class="uni-blog-article-tags-label">
+            Tagged:
+        </span>
+        <nav class="uni-blog-article-tags-container"
+             uni-component="analytics"
+             data-analytics="{
+                             'category': 'landing page lead',
+                             'action': 'article tag'
+                             }"
+             >
+            <ul>
+                <?php
+                foreach ($keywords as $word)
+                {
+                    ?>
+                    <li>
+                        <a class="uni-blog-article-tags-value uni-link-active"
+                            href="<?php echo weblog_url($user, $weblog, 'topics/'.$word); ?>"
+                            data-analytics="{'label': 'topic: {name}'}">
+                            <?php echo $word; ?>
+                        </a>
+                    </li>
+                    <?php
+                }
+                ?>
+            </ul>
+        </nav>
+    </div>
+    <?php
+}
+?>

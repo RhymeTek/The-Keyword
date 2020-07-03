@@ -1,0 +1,162 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+?>
+
+<!DOCTYPE html>
+
+    <?php
+    $data = [
+        'title'         => $user['full_name'].' | '.$user['username'].' - About',
+        'description'   => $user['bio'],
+        'canonical_url' => weblog_url($user, $weblog, 'about'),
+        'image_url'     => $user['profile_image_url'],
+    ];
+    $this->view('weblog/head', $data);
+    ?>
+
+    <body class="template-articlepage" uni-component="externalLinks">
+        <div uni-component="timesince"></div>
+        
+        <div data-layer="{
+            'slug': 'about',
+            'contentType': 'about page',
+            'author': '<?php echo $user['full_name']; ?>',
+            'primaryTag': 'about',
+            'secondaryTags': '',
+            'publishDate': '<?php echo date('Y-m-d|H:i', strtotime($user['created'])); ?>',
+            'goLiveDateTime': '<?php echo date('Y-m-d|H:i', strtotime($user['joined'] == '1000-01-01 00:00:00' ? $user['created'] : $user['joined'])); ?>',
+        }"></div>
+
+        <?php $this->view('weblog/header'); ?>
+
+        <main uni-component="analytics"
+              uni-options="{
+                'trackingEvent': 'scroll'
+              }">
+
+            <article class="uni-blog-article uni-theme-zero">
+                <section class="uni-container uni-blog-article-header-container">
+                    <!--article header content-->
+                    <div class="uni-wrapper">
+                        <div class="uni-content">
+                            <div class="uni-blog-article-header-wrapper">
+                                <div class="uni-blog-article-header"
+                                     uni-component="analytics"
+                                     data-analytics="{
+                                                     'category': 'about page lead',
+                                                     'action': 'about tag',
+                                                     'label': 'about'
+                                                     }">
+                                    <!--tag-->
+                                    <a class="uni-blog-article-tag uni-inherit-style uni-link-active"
+                                       href="<?php echo base_url('@'.$user['username']); ?>"
+                                       target="_blank"
+                                       >
+                                        About
+                                    </a>
+
+                                    <!--date-->
+                                    <?php
+                                    $date = $user['joined'] == '1000-01-01 00:00:00' ? $user['created'] : $user['joined'];
+                                    ?>
+                                    <time datetime="<?php echo date('Y-m-d H:m', strtotime($date)); ?>" class="uni-blog-article-date">
+                                        <?php echo date('M d, Y', strtotime($date)); ?>
+                                    </time>
+                                </div>
+                                <div class="uni-blog-article-title">
+                                    <h1 class="uni-responsive-text-0">
+                                        <?php echo $user['full_name']; ?>
+                                    </h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!--article body-->
+                <section class="uni-container" uni-component="selectionSharer">
+                    <div class="uni-wrapper">
+                        <!--article body content-->
+                        <div class="uni-content uni-blog-article-container">
+                            <!--article content-->
+                            <!--article text-->
+                            <div class="uni-blog-article-content" uni-component="tombstone">
+                                <div>
+                                    <div class="uni-paragraph">
+                                        <div class="rich-text">
+                                            <p><b><?php echo $user['username']; ?></b> <?php echo $user['bio']; ?></p>
+                                        </div>
+                                    </div>
+
+                                    <div class="uni-half-width align-right">
+                                        <figure>
+                                            <source media="(max-resolution: 1.5dppx)" sizes="400px" srcset="https://storage.googleapis.com/gweb-uniblog-publish-prod/images/bruegel_in_the_museum.width-400.jpg 400w">
+                                            <img src="<?php echo $user['place_s3_url']; ?>" alt="places visited" sizes="" srcset="" style="max-width: 400px">
+                                        </figure>
+                                    </div>
+
+                                    <div class="uni-paragraph">
+                                        <div class="rich-text">
+                                            <?php
+                                            if (!empty($about_list))
+                                            {
+                                                ?>
+                                                <ul>
+                                                    <?php
+                                                    foreach ($about_list as $about)
+                                                    {
+                                                        ?>
+                                                        <li>
+                                                            <p>
+                                                                <b><?php echo $about['title']; ?></b><br>
+                                                                <?php echo $about['description']; ?>
+                                                            </p>
+                                                        </li>
+                                                        <?php
+                                                    }
+                                                    ?>
+                                                </ul>
+                                                <?php
+                                            }
+                                            ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--posted in-->
+                    
+                            <!--tags-->
+                            <!-- <div class="uni-blog-article-tags">
+                                <span class="uni-blog-article-tags-label">
+                                    Posted in:
+                                </span>
+                                <nav class="uni-blog-article-tags-container"
+                                     uni-component="analytics"
+                                     data-analytics="{
+                                                     'category': 'landing page lead',
+                                                     'action': 'article tag'
+                                                     }"
+                                     >
+                                    <ul>
+                                        <li>
+                                            <a class="uni-blog-article-tags-value uni-link-active"
+                                               href="/topics/inside-google/"
+                                               data-analytics="{'label': 'topic: {name}'}"
+                                               >
+                                                Inside Google
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div> -->
+                        </div>
+                    </div>
+            </article>
+
+            <?php // $this->view('weblog/article_share_fab'); ?>
+        </main>
+
+        <?php $this->view('weblog/footer'); ?>
+    </body>
+</html>

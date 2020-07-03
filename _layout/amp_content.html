@@ -1,0 +1,246 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+?>
+
+<!--article header-->
+
+<section class="uni-container uni-blog-article-header-container
+                <?php if (!empty($post['item']['thumbnail_url'])) echo 'uni-blog-article-with-hero'; ?>
+               ">
+    <?php
+    if (!empty($post['item']['thumbnail_url']))
+    {
+        ?>
+        <div class="uni-blog-article-hero">
+            <amp-img src="<?php echo $post['item']['thumbnail_url']; ?>"
+                     alt=""
+                     class="image-responsive"
+                     layout="responsive"
+                     height="540"
+                     width="540"
+                     srcset="<?php echo $post['item']['thumbnail_url']; ?> 540w, <?php echo $post['item']['thumbnail_url']; ?> 1080w"
+                     >
+            </amp-img>
+
+            <!-- <amp-img src="https://storage.googleapis.com/gweb-uniblog-publish-prod/images/YIS_Supermoon_Keyword_2880x1600_.a8f020d8.fill-1080x1080.jpg"
+                     alt="Year in Search - Supermoon"
+                     class="image-responsive"
+                     layout="responsive"
+                     height="540"
+                     width="540"
+                     srcset="https://storage.googleapis.com/gweb-uniblog-publish-prod/images/YIS_Supermoon_Keyword_2880x1600_se.a8f020d8.fill-540x540.jpg 540w, https://storage.googleapis.com/gweb-uniblog-publish-prod/images/YIS_Supermoon_Keyword_2880x1600_.a8f020d8.fill-1080x1080.jpg 1080w"
+                     >
+            </amp-img> -->
+        </div>
+        <?php
+    }
+    ?>
+
+    <!--article header content-->
+    <div class="uni-wrapper">
+        <div class="uni-content">
+            <div class="uni-blog-article-header-wrapper">
+                <div class="uni-blog-article-header">
+                    
+                    <!--tag-->
+                    <a class="uni-blog-article-tag uni-inherit-style uni-link-active uni-tag-analytics-header-primary-tag"
+                       href="<?php echo $post['item']['url']; ?>" target="_blank"
+                       >
+                        <?php echo service_name($post['item']['service'], $post['item']['kind']); ?>
+                    </a>
+
+                    <amp-analytics type="googleanalytics">
+                        <script type="application/json">
+                            {
+                                "vars": {
+                                    "account": "UA-41643154-1"
+                                },
+                                "transport": {
+                                    "beacon": false,
+                                    "xhrpost": false
+                                },
+                                "extraUrlParams": {
+                                    "platform": "AMP",
+                                    "gtm": "GTM-T6L82N4"
+                                },
+
+                                "triggers": {
+                                    "trackClickOnArticleTagheader-primary-tag" : {
+                                        "on": "click",
+                                        "selector": "a.uni-tag-analytics-header-primary-tag",
+                                        "request": "event",
+                                        "vars": {
+                                            "event": "page interaction",
+                                            "eventCategory": "landing page lead",
+                                            "eventAction": "article tag",
+                                            "eventLabel": "service: <?php echo service_name($post['item']['service'], $post['item']['kind']); ?>"
+                                        }
+                                    }
+                                }
+                            }
+                        </script>
+                    </amp-analytics>
+
+                    <!--date-->
+                    <time datetime="<?php echo date('Y-m-d H:m', strtotime($post['item']['published'])); ?>" class="uni-blog-article-date">
+                        <?php echo time_elapsed($post['item']['published']); ?>
+                    </time>
+                </div>
+                <div class="uni-blog-article-title">
+                    <h1 class="uni-responsive-text-0">
+                        <?php
+                        if (!empty($post['item']['title'])) echo $post['item']['title'];
+                        else                                echo 'Uploaded a '.$post['item']['type'];
+                        ?>
+                    </h1>
+                </div>
+            </div>
+
+            <!-- <div class="uni-blog-article-authors uni-author-image-single">
+                <div>
+                    <div class="uni-byline">
+                        <address>
+                            <span>Ben Gomes</span>
+                                <div>
+                                    <span class="uni-byline-job">VP, Search</span>
+                                </div>
+                        </address>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+    </div>
+</section>
+
+<!--article body-->
+<section class="uni-container">
+    <div class="uni-wrapper">
+        <!--article body content-->
+        <div class="uni-content uni-blog-article-container">
+            
+            <!--article content-->
+            
+            <!--article text-->
+            <div class="uni-blog-article-content ">
+                <div class="uni-paragraph">
+                    <div class="rich-text">
+                        <p>
+                            <?php if (!empty($post['item']['description'])) echo $post['item']['description']; ?>
+                        </p>
+                    </div>
+                </div>
+
+                <?php
+                if (!empty($post['item']['label_0']))
+                {
+                    ?>
+                    <!-- Labels -->
+
+                    <div class="uni-paragraph">
+                        <div class="rich-text">
+                            <ul>
+                                <?php
+                                for ($i=0; $i < 3; $i++)
+                                { 
+                                    if (empty($post['item']['label_'.$i])) break;
+                                    ?>
+                                    <li>
+                                    <p><?php echo $post['item']['label_'.$i]; ?>: <?php echo $post['item']['value_'.$i]; ?></p>
+                                    </li>
+                                    <?php
+                                }
+                                ?>
+                            </ul>
+                        </div>
+                    </div>
+                    <?php
+                }
+                ?>
+
+                <?php
+                if (!empty($post['item']['venue']))
+                {
+                    ?>
+                    <!-- Venue -->
+                    <div class="uni-paragraph">
+                        <div class="rich-text">
+                            <p>Location: <?php echo $post['item']['venue']; ?></p>
+                        </div>
+                    </div>
+                    <?php
+                }
+                ?>
+            </div>
+        
+            <!--posted in-->
+
+            <!--tags-->
+            <?php
+            if (!empty($post['item']['keywords']))
+            {
+                $keywords = explode(',', $post['item']['keywords']);
+                ?>
+                <!--posted in-->
+
+                <!--tags-->
+                <div class="uni-blog-article-tags">
+                    <span class="uni-blog-article-tags-label">
+                        Tagged:
+                    </span>
+                    <nav class="uni-blog-article-tags-container">
+                        <ul>
+                            <?php
+                            foreach ($keywords as $word)
+                            {
+                                ?>
+                                <li>
+                                    <a class="uni-blog-article-tags-value uni-link-active uni-tag-analytics-tags-list-primary"
+                                       href="<?php echo weblog_url($user, $weblog, 'topics/'.$word); ?>"
+                                       >
+                                        <?php echo $word; ?>
+                                    </a>
+
+                                    <amp-analytics type="googleanalytics">
+                                        <script type="application/json">
+                                            {
+                                                "vars": {
+                                                    "account": "UA-41643154-1"
+                                                },
+                                                "transport": {
+                                                    "beacon": false,
+                                                    "xhrpost": false
+                                                },
+                                                "extraUrlParams": {
+                                                    "platform": "AMP",
+                                                    "gtm": "GTM-T6L82N4"
+                                                },
+
+                                                "triggers": {
+                                                    "trackClickOnArticleTagtags-list-primary" : {
+                                                        "on": "click",
+                                                        "selector": "a.uni-tag-analytics-tags-list-primary",
+                                                        "request": "event",
+                                                        "vars": {
+                                                            "event": "page interaction",
+                                                            "eventCategory": "landing page lead",
+                                                            "eventAction": "article tag",
+                                                            "eventLabel": "topic: <?php echo $word; ?>"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        </script>
+                                    </amp-analytics>
+                                </li>
+                                <?php
+                            }
+                            ?>
+                        </ul>
+                    </nav>
+                </div>
+                <?php
+            }
+            ?>
+        </div>
+    </div>
+</section>

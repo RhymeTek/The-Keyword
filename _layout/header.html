@@ -1,0 +1,223 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+?>
+
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-T6L82N4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+<a class="uni-header-skip-menu" tabindex="0" uni-component="skipMenu">
+    Skip to Main Content
+</a>
+
+<header class="uni-header-content" uni-component="header">
+    <div class="uni-header-wrapper">
+        <div class="uni-header-row uni-google-logo">
+            <a href="<?php echo weblog_url($user, $weblog); ?>">
+                <?php
+                $debug = FALSE;
+                if ($debug)
+                {
+                    ?>
+                    <figure>
+                        <img src="http://placehold.it/350x24"
+                             alt="Logo"
+                             style="width: inherit; max-height: 24px; max-width: 350px;">
+                    </figure>
+                    <?php
+                }
+                else if (!empty($weblog['logo']))
+                {
+                    ?>
+                    <figure>
+                        <img src="<?php echo s3_bucket_url($weblog['logo']); ?>"
+                             alt="<?php echo $user['full_name']; ?>"
+                             style="width: inherit; max-height: 24px; max-width: 350px;">
+                    </figure>
+                    <?php
+                }
+                else
+                {
+                    ?>
+                    <span style="font-size: 24px; font-family: Roboto Slab,san-serif; line-height: 1em; color: #555;">
+                        <?php echo $user['full_name']; ?>
+                    </span>
+                    <?php
+                }
+                ?>
+            </a>
+        </div>
+        <div class="uni-header-row uni-header-sub-menu">
+            <a href="<?php echo weblog_url($user, $weblog); ?>" class="uni-google-g-logo">
+                <?php
+                $debug = FALSE;
+                if ($debug)
+                {
+                    ?>
+                    <figure>
+                        <img src="http://placehold.it/64x64"
+                             alt="Icon"
+                             style="max-height: 26; max-width: 26px;">
+                    </figure>
+                    <?php
+                }
+                else if (!empty($weblog['icon']))
+                {
+                    ?>
+                    <figure>
+                        <img src="<?php echo s3_bucket_url($weblog['icon']); ?>"
+                             alt="<?php echo $user['username']; ?>"
+                             style="max-height: 26; max-width: 26px;">
+                    </figure>
+                    <?php
+                }
+                else
+                {
+                    ?>
+                    <figure>
+                        <img src="<?php echo asset_url('weblog/images/glyph.svg'); ?>"
+                         alt="<?php echo $user['username']; ?>"/>
+                    </figure>
+                    <?php
+                }
+                ?>
+            </a>
+            <a href="<?php echo weblog_url($user, $weblog); ?>" class="uni-header-logo"
+               uni-component="analytics"
+               data-analytics="{
+                           'category': 'navigation',
+                           'action': 'header',
+                           'label': 'navlink: home'
+                           }">
+                
+                <?php
+                $debug = FALSE;
+                if ($debug)
+                {
+                    ?>
+                    <figure>
+                        <img src="http://placehold.it/250x18"
+                             alt="Title"
+                             style="width: inherit; max-height: 18px; max-width: 250px;">
+                    </figure>
+                    <?php
+                }
+                else if (!empty($weblog['title']))
+                {
+                    ?>
+                    <figure>
+                        <img src="<?php echo s3_bucket_url($weblog['title']); ?>"
+                             alt="<?php echo $user['username']; ?>"
+                             style="width: inherit; max-height: 18px; max-width: 250px;">
+                    </figure>
+                    <?php
+                }
+                else
+                {
+                    ?>
+                    <figure>
+                        <img src="<?php echo asset_url('weblog/images/weblog-logo.svg'); ?>"
+                         alt="<?php echo $user['username']; ?>"/>
+                    </figure>
+
+                    <!-- <span style="font-size: 18px; font-family: Roboto,serif; line-height: 1em; color: #777;">
+                        <?php echo ($user['username']); ?>
+                    </span> -->
+                    <?php
+                }
+                ?>
+            </a>
+            <nav uni-component="analytics"
+                 data-analytics="{
+                             'category': 'navigation',
+                             'action': 'header',
+                             'label': 'navlink: {name}'
+                             }">
+                <a href="<?php echo weblog_url($user, $weblog); ?>" uni-component="hyperlink">
+                    Latest Stories
+                </a>
+                <a href="<?php echo weblog_url($user, $weblog, 'collections'); ?>" uni-component="hyperlink">
+                    Collections
+                </a>
+                <a href="<?php echo weblog_url($user, $weblog, 'topics'); ?>" uni-component="hyperlink">
+                    Topics
+                </a>
+            </nav>
+
+            <form class="search-container"
+                  uni-component="searchBar"
+                  uni-options="{
+                    'open': '.uni-header-buttons-container .uni-header-search-button',
+                    'endpoint': '<?php echo weblog_api_endpoint($user, $weblog, 'api/v1/type-ahead/'.$user['username']); ?>',
+                    'searchUrl': '<?php echo weblog_url($user, $weblog, 'search'); ?>'
+                  }">
+                <!--search box-->
+                
+                <div class="uni-search-box">
+                    <input type="text" placeholder="Search stories" aria-label="Search stories"/>
+                    <div class="uni-type-ahead" uni-component="touchScroll"></div>
+                    <button class="uni-search-box-search-button" aria-label="Search">
+                    </button>
+                    <button class="uni-search-box-close-button" aria-label="Close search">
+                    </button>
+                </div>
+
+            </form>
+
+            <div class="uni-header-buttons-container">
+                <button class="hide-small hide-medium uni-header-search-button"
+                        aria-label="Search">
+                </button>
+                
+
+                <div class="uni-menu uni-header-dropdown uni-menu-responsive"
+                     uni-component="menu"
+                     uni-options="{
+                        'customClass': 'uni-header-menu-open',
+                        'relatedItems': '.search-container',
+                        'onClose': 'uniblog.event.header.onMenuClose'
+                     }">
+                    <button class="uni-header-menu-button">
+                        <span class="hide-large">Menu</span>
+                    </button>
+                    <ul uni-component="analytics"
+                        data-analytics="{
+                                        'category': 'navigation',
+                                        'action': 'header',
+                                        'label': 'navlink: {name}'
+                                        }">
+                        <li>
+                            <a class="hide-large" href="<?php echo weblog_url($user, $weblog); ?>">
+                                Latest Stories
+                            </a>
+                        </li>
+                        <li>
+                            <a class="hide-large" href="<?php echo weblog_url($user, $weblog, 'collections'); ?>">
+                                Collection
+                            </a>
+                        </li>
+                        <li>
+                            <a class="hide-large" href="<?php echo weblog_url($user, $weblog, 'topics'); ?>">
+                                Topics
+                            </a>
+                        </li>
+                        <li>
+                            <a href="<?php echo weblog_url($user, $weblog, 'about'); ?>">About</a>
+                        </li>
+                        <li>
+                            <a href="<?php echo weblog_url($user, $weblog, 'random'); ?>"
+                               data-analytics="{'label': 'navlink: random'}">Random
+                            </a>
+                        </li>
+                        <li>
+                            <a href="<?php echo weblog_url($user, $weblog, 'rss'); ?>">RSS Feed<i class="uni-icon uni-icon-rss"></i></a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="uni-main-overlay"></div>
+</header>

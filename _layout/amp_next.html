@@ -1,0 +1,129 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+?>
+
+<!--related articles-->
+
+<?php
+if (!empty($post_next_list))
+{
+    ?>
+    <section class="uni-article-list uni-up-next">
+        <div class="uni-wrapper uni-wrapper-medium-full-width">
+            <h1>Up next</h1>
+            
+            <nav>
+                <?php
+                $i = 0;
+                foreach ($post_next_list as $post_item)
+                {
+                    $i++;
+                    ?>
+                    <a href="<?php echo weblog_url($user, $weblog, $post_item['slug'].'~'.$post_item['post_id']); ?>" class="uni-article-list-<?php echo $i; ?>">
+                        <div class="uni-article-item-header">
+                            <!--date-->
+                            <time datetime="<?php echo date('Y-m-d H:m', strtotime($post_item['published'])); ?>">
+                                <?php echo time_elapsed($post_item['published']); ?>
+                            </time>
+
+                            <!--Product brand-->
+                            <span>
+                                <?php echo service_name($post_item['service'], $post_item['kind']); ?>
+                            </span>
+                        </div>
+
+                        <?php
+                        if (!empty($post_item['thumbnail_url']))
+                        {
+                            ?>
+                            <figure class="uni-up-next">
+                                <amp-img src="<?php echo $post_item['thumbnail_url']; ?>"
+                                         alt=""
+                                         class="image-responsive"
+                                         layout="responsive"
+                                         height="120"
+                                         width="120"
+                                         srcset="<?php echo $post_item['thumbnail_url']; ?> 120w, <?php echo $post_item['thumbnail_url']; ?> 240w"
+                                         >
+                                </amp-img>
+
+                                <!-- <amp-img src="https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Students_of_Mazahua_background_exp.2e16d0ba.fill-240x240.jpg"
+                                         alt="Students of Mazahua background explore learning materials on a tablet at an UNETE-supported school in San Felipe del Progreso, State of Mexico..JPG"
+                                         class="image-responsive"
+                                         layout="responsive"
+
+                                         height="120"
+
+                                         width="120"
+                                         srcset="https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Students_of_Mazahua_background_exp.2e16d0ba.fill-120x120.jpg 120w, https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Students_of_Mazahua_background_exp.2e16d0ba.fill-240x240.jpg 240w"
+                                         >
+                                </amp-img> -->
+                            </figure>
+                            <?php
+                        }
+                        ?>
+
+                        <section>
+                            <h2>
+                                <?php
+                                if (!empty($post_item['title']))            echo $post_item['title'];
+                                elseif (!empty($post_item['description']))  echo $post_item['description'];
+                                else                                        echo 'VIEW POST';
+                                ?>
+                            </h2>
+                        </section>
+                    </a>
+                    <?php
+                }
+                ?>
+            </nav>
+        </div>
+    </section>
+
+    <amp-analytics type="googleanalytics">
+        <script type="application/json">
+        {
+            "vars": {
+                "account": "UA-41643154-1"
+            },
+            "transport": {
+                "beacon": false,
+                "xhrpost": false
+            },
+            "extraUrlParams": {
+                "platform": "AMP",
+                "gtm": "GTM-T6L82N4"
+            },
+            "triggers": {
+                
+                <?php
+                $i = 0;
+                $post_count = count($post_next_list);
+                foreach ($post_next_list as $post_item)
+                {
+                    $i++;
+                    ?>
+
+                    "trackClickOnArticleList<?php echo $i; ?>" : {
+                        "on": "click",
+                        "selector": "a.uni-article-list-<?php echo $i; ?>",
+                        "request": "event",
+                        "vars": {
+                            "event": "page interaction",
+                            "eventCategory": "article lead",
+                            "eventAction": "up next",
+                            "eventLabel": "article: <?php echo $post_item['post_id']; ?>"
+                        }
+                    }<?php if ($i < $post_count): ?>,<?php endif; ?>
+
+                    <?php
+                }
+                ?>
+                
+            }
+        }
+        </script>
+      </amp-analytics>
+    <?php
+}
+?>

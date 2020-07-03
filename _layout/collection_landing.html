@@ -1,0 +1,71 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+?>
+
+<!DOCTYPE html>
+
+    <?php
+    $data = [
+        'title'         => ucfirst($type).' | '.$user['full_name'],
+        'description'   => 'Explore '.$type.' collections by '.$user['full_name'],
+        'canonical_url' => weblog_url($user, $weblog, 'collections/'.$type),
+        'image_url'     => $user['profile_image_url'],
+    ];
+    $this->view('weblog/head', $data);
+    ?>
+
+    <body class="template-productlandingpage" uni-component="externalLinks">
+        <div uni-component="timesince"></div>
+
+        <div data-layer="{
+            'slug': '<?php echo $type; ?>',
+            'contentType': 'collection landing page',
+            'tags': 'collections - <?php echo $type; ?>',
+        }"></div>
+        
+        <?php $this->view('weblog/header'); ?>
+
+        <main uni-component="analytics"
+              uni-options="{
+                'trackingEvent': 'scroll'
+              }">
+
+            <article class="uni-blog-landing">
+                <!--article header-->
+                <section class="uni-container uni-blog-landing-header-container uni-theme-<?php echo get_theme_color($post_list_popular['items'][0]['service'] . $post_list_popular['items'][0]['kind']); ?> <?php if (!empty($post_list_popular['items'][0]['thumbnail_url'])) echo 'uni-image-gradient'; ?>">
+                    <?php
+                    $this->view('weblog/collection_landing_hero', [
+                        'title' => ucfirst($type),
+                        'rss' => 'collections/'.$type.'/rss'
+                    ]);
+                    ?>
+
+                    <?php
+                    if (!empty($post_list_popular['items']))
+                    {
+                        $this->view('weblog/collection_header_content', ['post_item' => $post_list_popular['items'][0]]);
+                        unset($post_list_popular['items'][0]);
+                    }
+                    ?>
+                </section>
+
+                <?php
+                if (!empty($post_list_popular['items']))
+                {
+                    $post_list = [];
+                    foreach ($post_list_popular['items'] as $post_item) $post_list[] = $post_item;
+
+                    $this->view('weblog/top_stories', [
+                        'post_list' => $post_list,
+                        'orientation' => 'right-aligned'
+                    ]);
+                }
+                ?>
+
+                <?php $this->view('weblog/latest_stories_list', [ 'api_endpoint' => 'collection/'.$user['username'].'/'.$type ]); ?>
+            </article>
+        </main>        
+
+        <?php $this->view('weblog/footer'); ?>
+    </body>
+</html>

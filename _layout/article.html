@@ -1,0 +1,50 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+?>
+
+<!DOCTYPE html>
+
+    <?php
+    $data = [
+        'title'         => $post['item']['title'].' | '.$user['full_name'],
+        'description'   => $post['item']['description'],
+        'canonical_url' => weblog_url($user, $weblog, $post['item']['slug'].'~'.$post['item']['post_id']),
+        'image_url'     => !empty($post['item']['thumbnail_url']) ? $post['item']['thumbnail_url'] : $user['profile_image_url'],
+    ];
+    $this->view('weblog/head', $data);
+    ?>
+
+    <body class="template-articlepage" uni-component="externalLinks">
+        <div uni-component="timesince"></div>
+        
+        <div data-layer="{
+            'slug': '<?php echo $post['item']['post_id']; ?>',
+            'contentType': 'article page',
+            'author': '<?php if (!empty($post['item']['author_name'])) echo $post['item']['author_name'].','; echo $user['full_name']; ?>',
+            'primaryTag': 'collections - <?php echo $post['item']['type']; ?>',
+            'secondaryTags': 'topics - <?php if (!empty($post['item']['keywords'])) echo $post['item']['keywords']; ?>',
+            'publishDate': '<?php echo date('Y-m-d|H:i', strtotime($post['item']['published'])); ?>',
+            'goLiveDateTime': '<?php echo date('Y-m-d|H:i', strtotime($post['item']['uploaded'])); ?>',
+        }"></div>
+
+        <?php $this->view('weblog/header'); ?>
+
+        <main uni-component="analytics"
+              uni-options="{
+                'trackingEvent': 'scroll'
+              }">
+
+            <article class="uni-blog-article uni-theme-<?php echo get_theme_color($post['item']['service'] . $post['item']['kind']); ?>">
+                <?php $this->view('weblog/article_header'); ?>
+
+                <?php $this->view('weblog/article_content'); ?>
+
+                <?php $this->view('weblog/article_next'); ?>
+            </article>
+
+            <?php $this->view('weblog/article_share_fab'); ?>
+        </main>
+
+        <?php $this->view('weblog/footer'); ?>
+    </body>
+</html>

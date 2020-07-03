@@ -1,0 +1,29 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+?>
+
+<!DOCTYPE html>
+<html amp lang="en" class="no-js glue-flexbox glue-app-ready">
+    <?php
+    $data = [
+        'title'         => $post['item']['title'].' | '.$user['full_name'],
+        'description'   => $post['item']['description'],
+        'canonical_url' => weblog_url($user, $weblog, $post['item']['slug'].'~'.$post['item']['post_id']),
+        'image_url'     => !empty($post['item']['thumbnail_url']) ? $post['item']['thumbnail_url'] : $user['profile_image_url'],
+    ];
+    $this->view('weblog/amp_head', $data);
+    ?>
+
+    <body class="uni-amp">
+        <?php $this->view('weblog/amp_header'); ?>
+
+        <main>
+            <article class="uni-blog-article uni-theme-<?php echo get_theme_color($post['item']['service'] . $post['item']['kind']); ?>">
+                <?php $this->view('weblog/amp_content'); ?>
+                <?php $this->view('weblog/amp_next'); ?>
+            </article>
+        </main>
+
+        <?php $this->view('weblog/amp_footer'); ?>
+    </body>
+</html>

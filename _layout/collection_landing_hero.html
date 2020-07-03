@@ -1,0 +1,95 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+?>
+
+<div class="uni-blog-landing-hero">
+    <div class="uni-wrapper">
+        <div class="uni-blog-landing-hero-content">
+            <div class="uni-blog-landing-name">
+                <h1><?php echo $title; ?></h1>
+                
+                <div class="uni-blog-landing-subtitle"><div class="rich-text"><p>
+                    What's happening
+                </p></div></div>
+            </div>
+            <div class="uni-blog-landing-social-network">
+                <nav uni-component="analytics"
+                     data-analytics="{
+                                     'category': 'social',
+                                     'action': 'follow - landing',
+                                     'label': 'social network: {name}|account: <?php echo $title; ?>'
+                                     }">
+                    <div>
+                        <a class="" href="<?php echo weblog_url($user, $weblog, $rss); ?>"
+                           aria-label="RSS"
+                        >
+                           <i class="icon-rss" style="font-size: 1.1rem;
+                                color: inherit;
+                                display: inline-block;
+                                transition: color .3s;"></i>
+                        </a>
+
+                        <?php
+                        if (!empty($post_type_actor_list))
+                        {
+                            $this->config->load('service', TRUE);
+                            $service_info = $this->config->item('info', 'service');
+
+                            // view/user/about_ext_link, view/settings/actor_list
+                            $actors_sorted = array();
+                            foreach ($post_type_actor_list as $a) $actors_sorted[ $a['service'].'.'.$a['kind'].'.'.$a['actor_id'] ] = $a;
+
+                            ksort($actors_sorted);
+                            $post_type_actor_list = array();
+                            foreach ($actors_sorted as $a) $post_type_actor_list[] = $a;
+
+                            foreach ($post_type_actor_list as $a)
+                            {
+                                if (!empty($a['url']))
+                                {
+                                    ?>
+                                    <a href="<?php echo $a['url']; ?>" target="_blank"
+                                    aria-label="<?php echo $service_info[ $a['service'] ]['kind'][ $a['kind'] ]['name']; ?>"
+                                    >
+                                        <i class="<?php echo $service_info[ $a['service'] ]['kind'][ $a['kind'] ]['icon']; ?>" style="font-size: 1.1rem;
+                                                        color: inherit;
+                                                        display: inline-block;
+                                                        transition: color .3s;"></i>
+                                    </a>
+                                    <?php
+                                }
+                            }
+                        }
+                        ?>
+
+                        <!-- 
+                        <a class="uni-icon-rss uni-analytics-link" href="/products/chrome/rss"
+                            aria-label="RSS">
+                        </a>
+
+                        <a class="uni-icon-google" href="https://plus.google.com/+YouTube"
+                           aria-label="Google+">
+                        </a>
+                    
+                        <a class="uni-icon-twitter" href="https://twitter.com/YouTube"
+                           aria-label="Twitter">
+                        </a>
+                    
+                        <a class="uni-icon-facebook" href="https://www.facebook.com/youtube"
+                           aria-label="Facebook">
+                        </a>
+                    
+                        <a class="uni-icon-instagram" href="https://www.instagram.com/youtube/"
+                           aria-label="Instagram">
+                        </a>
+                    
+                        <a class="uni-icon-youtube" href="https://www.youtube.com/user/YouTube"
+                           aria-label="Youtube">
+                        </a>
+                         -->
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,177 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+?>
+
+<?php
+$twitter_user = NULL;
+if (!empty($actor_list)) foreach ($actor_list as $actor) {
+    if ($actor['service'] == 'twitter') {
+        $twitter_user = $actor['username']; break;
+    }
+}
+
+$facebook_publisher = NULL;
+if (!empty($actor_list)) foreach ($actor_list as $actor) {
+    if ($actor['service'] == 'facebook' AND $actor['kind'] == 'page') {
+        $facebook_publisher = $actor['url']; break;
+    }
+}
+?>
+
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7 glue-app-ready" xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en' > <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8 glue-app-ready" xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en' > <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9 glue-app-ready" xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en' > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js glue-flexbox glue-app-ready" xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en' > <!--<![endif]-->
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title><?php echo $title; ?></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <?php
+    if (!empty($post))
+    {
+        ?>
+         <!--Article Specific Metadata-->
+        <meta name="description" content="<?php echo $description; ?>"/>
+        <meta name="keywords" content=""/>
+        <meta name="article-author" content="<?php if (!empty($post['item']['author_name'])) echo $post['item']['author_name'].','; echo $user['full_name']; ?>"/>
+
+        <!--Open Graph Metadata-->
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content="<?php echo $title; ?>"/>
+        <meta property="og:description" content="<?php echo $description; ?>" />
+        <meta property="og:image" content="<?php echo $image_url; ?>" />
+        <meta property="og:site_name" content="<?php echo $user['full_name']; ?>" />
+        <meta property="og:url" content="<?php echo $canonical_url; ?>" />
+
+        <?php
+        if (!empty($facebook_publisher))
+        {
+            ?>
+            <meta property="article:publisher" content="<?php echo $facebook_publisher; ?>" />
+            <meta property="article:published_time" content="<?php echo date('Y-m-d', strtotime($post['item']['published'])); ?>" />
+            <?php
+        }
+        ?>
+
+        <!--Twitter Card Metadata-->
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:url" content="<?php echo $canonical_url; ?>" />
+        <meta name="twitter:title" content="<?php echo $title; ?>"/>
+        <meta name="twitter:description" content="<?php echo $description; ?>" />
+        <meta name="twitter:image:src" content="<?php echo $image_url; ?>" />
+
+        <?php
+        if (!empty($twitter_user))
+        {
+            ?>
+            <meta name="twitter:site" content="@<?php echo $twitter_user; ?>" />
+            <?php
+        }
+        ?>
+
+        <script type="application/ld+json">
+            {
+                "@context": "http://schema.org",
+                "@type": "NewsArticle",
+                "mainEntityOfPage": "<?php echo $canonical_url; ?>",
+                "headline": "<?php echo $title; ?>",
+                "datePublished": "<?php echo $post['item']['uploaded']; ?>",
+                "dateModified": "<?php echo $post['item']['published']; ?>",
+                "description": "<?php echo $description; ?>",
+
+                <?php
+                if (!empty($post['item']['author_name']))
+                {
+                    ?>"author": {
+                        "@type": "Person",
+                        "name": "<?php echo $post['item']['author_name']; ?>"
+                    },
+                    "publisher": {
+                        "@type": "Organization",
+                        "name": "<?php echo $user['full_name']; ?>",
+                        "logo": {
+                            "@type": "ImageObject",
+                            "url": "<?php echo $user['profile_image_url']; ?>",
+                            "width": "200",
+                            "height": "200"
+                        }
+                    },
+                    <?php
+                }
+                else
+                {
+                    ?>"author": {
+                        "@type": "Person",
+                        "name": "<?php echo $user['full_name']; ?>"
+                    },
+                    <?php
+                }
+                ?>
+                
+                <?php
+                if (!empty($post['item']['thumbnail_url']))
+                {
+                    ?>"image": {
+                        "@type": "ImageObject",
+                        "url": "<?php echo $post['item']['thumbnail_url']; ?>",
+                        "width": "1440",
+                        "height": "810"
+                    }
+                    <?php
+                }
+                ?>
+                
+            }
+        </script>
+
+        <link rel="amphtml" href="<?php echo weblog_url($user, $weblog, $post['item']['slug'].'~'.$post['item']['post_id'].'/amp'); ?>">
+        <?php
+    }
+    else
+    {
+        ?>
+        <!--Article Specific Metadata-->
+        <meta name="description" content="<?php echo $description; ?>"/>
+        <meta name="keywords" content=""/>
+
+        <!--Open Graph Metadata-->
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="<?php echo $title; ?>"/>
+        <meta property="og:description" content="<?php echo $description; ?>" />
+        <meta property="og:image" content="<?php echo $image_url; ?>" />
+        <meta property="og:site_name" content="<?php echo $user['full_name']; ?>" />
+        <meta property="og:url" content="<?php echo $canonical_url; ?>" />
+
+        <!--Twitter Card Metadata-->
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:url" content="<?php echo $canonical_url; ?>" />
+        <meta name="twitter:title" content="<?php echo $title; ?>"/>
+        <meta name="twitter:description" content="<?php echo $description; ?>" />
+        <meta name="twitter:image:src" content="<?php echo $image_url; ?>" />
+        
+        <?php
+        if (!empty($twitter_user))
+        {
+            ?>
+            <meta name="twitter:site" content="@<?php echo $twitter_user; ?>" />
+            <?php
+        }
+        ?>
+        <?php
+    }
+    ?>
+
+    <link rel="canonical" href="<?php echo $canonical_url; ?>" />
+
+    <link rel="stylesheet" type="text/css" href="<?php echo asset_url('weblog/css/blog.min.8fb9ff5f0521.css'); ?>" />
+    <link href="//fonts.googleapis.com/css?family=Roboto:100,200,300,400,500,700" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Roboto+Slab:100,200,300,400" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="<?php echo asset_url('weblog/css/print.min.f2c37926ace2.css'); ?>" media="print" />
+
+    <?php if (!empty($weblog['icon'])): ?>
+    <link rel="icon" href="<?php echo s3_bucket_url($weblog['icon']); ?>" type="<?php echo $weblog['icon_mime']; ?>"/>
+    <?php endif; ?>
+</head>

@@ -1,0 +1,106 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+?>
+
+<footer>
+    <section class="uni-footer-links">
+        <figure>
+            <amp-img layout="fixed"
+                     width="87"
+                     height="28"
+                     src="<?php echo asset_url('weblog/images/logotype.svg'); ?>"
+                     alt="Rime"></amp-img>
+        </figure>
+        <a class="uni-footer-help" href="<?php echo base_url(); ?>" target="_blank">
+            <figure>
+                <amp-img layout="fixed"
+                         width="24"
+                         height="24"
+                         src="<?php echo asset_url('weblog/fonts/icons/svg/help.888bca38483a.svg'); ?>"></amp-img>
+            </figure>
+            Help
+        </a>
+        <a class="uni-footer-privacy" href="<?php echo base_url(); ?>" target="_blank">
+            Privacy
+        </a>
+        <a class="uni-footer-terms" href="<?php echo base_url(); ?>" target="_blank">
+            Terms
+        </a>
+    </section>
+</footer>
+
+<amp-analytics type="googleanalytics">
+    <script type="application/json">
+        {
+            "vars": {
+                "account": "UA-41643154-1"
+            },
+            "transport": {
+                "beacon": false,
+                "xhrpost": false
+            },
+            "extraUrlParams": {
+                "platform": "AMP",
+                "gtm": "GTM-T6L82N4"
+            },
+
+            "triggers": {
+                "trackClickOnFooterHelp" : {
+                    "on": "click",
+                    "selector": "footer a.uni-footer-help",
+                    "request": "event",
+                    "vars": {
+                        "event": "page interaction",
+                        "eventCategory": "navigation",
+                        "eventAction": "footer",
+                        "eventLabel": "navlink: link help"
+                    }
+                },
+                "trackClickOnFooterPrivacy" : {
+                    "on": "click",
+                    "selector": "footer a.uni-footer-privacy",
+                    "request": "event",
+                    "vars": {
+                        "event": "page interaction",
+                        "eventCategory": "navigation",
+                        "eventAction": "footer",
+                        "eventLabel": "navlink: link privacy"
+                    }
+                },
+                "trackClickOnFooterTerms" : {
+                    "on": "click",
+                    "selector": "footer a.uni-footer-terms",
+                    "request": "event",
+                    "vars": {
+                        "event": "page interaction",
+                        "eventCategory": "navigation",
+                        "eventAction": "footer",
+                        "eventLabel": "navlink: link terms"
+                    }
+                },
+                "trackClickOnFooterAbout" : {
+                    "on": "click",
+                    "selector": "footer a.uni-footer-about",
+                    "request": "event",
+                    "vars": {
+                        "event": "page interaction",
+                        "eventCategory": "navigation",
+                        "eventAction": "footer",
+                        "eventLabel": "navlink: link about google"
+                    }
+                },
+                "trackClickOnFooterProducts" : {
+                    "on": "click",
+                    "selector": "footer a.uni-footer-products",
+                    "request": "event",
+                    "vars": {
+                        "event": "page interaction",
+                        "eventCategory": "navigation",
+                        "eventAction": "footer",
+                        "eventLabel": "navlink: link Google Products"
+                    }
+                }
+            }
+        }
+    </script>
+</amp-analytics>

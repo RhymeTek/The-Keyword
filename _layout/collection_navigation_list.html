@@ -1,0 +1,94 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+?>
+
+<?php
+// $post_type_list = [
+//     ['type' => 'album', 'count' => 1],
+//     ['type' => 'article', 'count' => 1],
+//     ['type' => 'audio', 'count' => 1],
+//     ['type' => 'code', 'count' => 1],
+//     ['type' => 'event', 'count' => 1],
+//     ['type' => 'photo', 'count' => 1],
+//     ['type' => 'playlist', 'count' => 1],
+//     ['type' => 'poll', 'count' => 1],
+//     ['type' => 'product', 'count' => 1],
+//     ['type' => 'question', 'count' => 1],
+//     ['type' => 'status', 'count' => 1],
+//     ['type' => 'video', 'count' => 1],
+// ];
+?>
+
+<!--products navigation list-->
+<section class="uni-blog-landing-list"
+             uni-component="analytics"
+             data-analytics="{
+                             'category': 'landing page lead',
+                             'action': 'list collections'
+                             }">
+    <div class="uni-wrapper">
+        <h1>Collections</h1>
+
+        <div class="uni-blog-landing-list-content">
+            <?php
+            foreach ($post_type_list as $type)
+            {
+                ?>
+                <a href="<?php echo weblog_url($user, $weblog, 'collections/'.$type['type']); ?>"
+                   data-analytics="{'label': 'product: Android'}">
+                            
+                    <figure class="" style="background-color: #37474F; border-radius: 50%">
+                        <picture>
+                            <!-- <source media="(max-resolution: 1.5dppx)"
+                                    sizes="50px"
+                                    srcset="https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Android_4rLYjci.2e16d0ba.fill-50x50.png 50w">
+                        
+                            <source media="(min-resolution: 1.5dppx)"
+                                    sizes="100px"
+                                    srcset="https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Android_4rLYjci.2e16d0ba.fill-100x100.png 100w">
+                        
+                            <img src="https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Android_4rLYjci.2e16d0ba.fill-100x100.png"
+                             
+                                alt="Android.png"
+
+                             sizes=" 50px,  100px"
+                             srcset="https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Android_4rLYjci.2e16d0ba.fill-50x50.png 50w, https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Android_4rLYjci.2e16d0ba.fill-100x100.png 100w">
+ -->
+                            <img src="<?php echo asset_url('weblog/images/material-icons/'.post_type_icon( $type['type'] ).'.svg'); ?>" style="padding: 25%">
+                        </picture>
+                    </figure>
+
+                    <section>
+                        <h2><?php echo ucfirst($type['type']); ?></h2>
+                    </section>
+                </a>
+                <?php
+            }
+            ?>
+        </div>
+    </div>
+</section>
+
+<!--products tertiary list-->
+<!-- <section class="uni-blog-landing-tertiary-list"
+         uni-component="analytics"
+         data-analytics="{
+                         'category': 'landing page lead',
+                         'action': 'additional products'
+                         }">
+    <div class="uni-wrapper">
+        <div class="uni-blog-landing-tertiary-list-content">
+            <h2>Additional Apps</h2>
+
+            <nav class="show-large">
+                <div>
+                    <a href="/products/android-wear/"
+                       data-analytics="{'label': 'product: Android Wear'}">
+                        Android <span>Wear</span>
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </div>
+</section>
+ -->

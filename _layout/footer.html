@@ -1,0 +1,179 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+?>
+
+<footer>
+    <section class="uni-footer-social-networks"
+             uni-component="analytics"
+             data-analytics="{
+                             'category': 'social',
+                             'action': 'follow - footer',
+                             'label': 'social network: {name}|account:uniblog'
+                             }">
+        <span>
+            Follow
+        </span>
+        <div style="display: inline-block; width: 60%">
+
+            <?php
+            if (!empty($actor_list))
+            {
+                $this->config->load('service', TRUE);
+                $service_info = $this->config->item('info', 'service');
+
+                // view/user/about_ext_link, view/settings/actor_list
+                $actor_list_sorted = array();
+                foreach ($actor_list as $a) $actors_sorted[ $a['service'].'.'.$a['oauth_id'].'.'.$a['kind'].'.'.$a['actor_id'] ] = $a;
+
+                ksort($actors_sorted);
+                $actor_list = array();
+                foreach ($actors_sorted as $a) $actor_list[] = $a;
+
+                foreach ($actor_list as $a)
+                {
+                    if (!empty($a['url']))
+                    {
+                        ?>
+                        <a href="<?php echo $a['url']; ?>" target="_blank"
+                        aria-label="<?php echo $service_info[ $a['service'] ]['kind'][ $a['kind'] ]['name']; ?>"
+                        style="font-size: 0.91rem;"
+                        >
+                            <i class="<?php echo $service_info[ $a['service'] ]['kind'][ $a['kind'] ]['icon']; ?>"></i>
+                        </a>
+                        <?php
+                    }
+                }
+            }
+            ?>
+
+            <!--
+            <a class="uni-icon-rss uni-analytics-link" href="/products/g-suite/rss" aria-label="RSS"></a>
+            <a class="uni-icon-google" href="https://plus.google.com/+google/" target="_blank"
+               aria-label="Google +"></a>
+            <a class="uni-icon-twitter" href="https://twitter.com/google" target="_blank"
+               aria-label="Twitter"></a>
+            <a class="uni-icon-youtube" href="https://www.youtube.com/google" target="_blank"
+               aria-label="Youtube"></a>
+            <a class="uni-icon-linkedin" href="https://www.linkedin.com/company/google" target="_blank"
+               aria-label="Linkedin"></a>
+            <a class="uni-icon-facebook-footer" href="https://www.facebook.com/Google" target="_blank"
+               aria-label="Facebook"></a>
+            <a class="uni-icon-instagram" href="https://www.instagram.com/google/" target="_blank"
+               aria-label="Instagram"></a>
+            -->
+        </div>
+    </section>
+    <section class="uni-footer-links"
+             uni-component="analytics"
+             data-analytics="{
+                             'category': 'navigation',
+                             'action': 'footer',
+                             'label': 'navlink: {name}'
+                             }">
+        <figure>
+            <a class="" href="<?php echo base_url('?utm_source=product&utm_medium=footer_logo&utm_campaign=weblog'); ?>" target="_blank">
+                <img src="<?php echo asset_url('weblog/images/logotype.svg'); ?>"
+                     alt="Rime"/>
+            </a>
+        </figure>
+        <a class="uni-footer-help" href="<?php echo base_url('support/faq'); ?>" target="_blank">
+            Help
+        </a>
+        <a class="uni-footer-privacy" href="<?php echo base_url('legal/privacy'); ?>" target="_blank">
+            Privacy
+        </a>
+        <a href="<?php echo base_url('legal/terms'); ?>" target="_blank">
+            Terms
+        </a>
+    </section>
+</footer>
+
+<div class="uni-modal">
+    <div class="uni-modal-overlay"></div>
+    <div class="uni-modal-wrapper">
+        <div class="uni-modal-container">
+            <button class="uni-modal-close-button" aria-label="Close">
+            </button>
+            <div class="uni-modal-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- 
+Custom static/weblog/js/blog.31aa973a3cea.js
+
+# uniblog.utils = function() {
+    // search: function(a, b, c) {
+    search: function(endpoint, a, b, c) {
+
+    // c = c || uniblog.common.constants.SEARCH_URL;
+    c = c || endpoint;
+
+# uniblog.components.searchBar = {};
+    // this.typeAhead.call = goog.net.XhrIo.send("/api/v1/type-ahead/?q=" + a, this.onGetTypeAhead.bind(this)))
+    this.typeAhead.call = goog.net.XhrIo.send(this.options.endpoint + "?q=" + a, this.onGetTypeAhead.bind(this)))
+
+    // uniblog.utils.search(this.searchObject)
+    uniblog.utils.search(this.options.searchUrl, this.searchObject)
+
+# uniblog.components.searchForm = {};
+    // uniblog.utils.search(this.searchObject, this.options.allowEmptySearch, this.options.searchPage);
+    uniblog.utils.search(this.options.searchUrl, this.searchObject, this.options.allowEmptySearch, this.options.searchPage);
+
+# uniblog.components.searchController = {};
+    // random_url: "/random/",
+    // latest_url: "/",
+    // about_google_url: "//google.com/about",
+    // press_corner_url: "/press/"
+    username: this.options.username,
+    random_url: this.options.base_url + "/random",
+    latest_url: this.options.base_url,
+    about_google_url: this.options.base_url + "/about"
+ -->
+
+<div id="base-scripts" data-scripts='[
+      { "url": "<?php echo asset_url('weblog/js/data-layer-analytics.da7f878b7c0e.js'); ?>",
+        "options": {
+          "async": false,
+          "defer": false
+        }
+      },
+      { "url": "<?php echo asset_url('weblog/js/gtm.d797bb14a102.js'); ?>",
+        "options": {
+          "async": false,
+          "defer": false
+        }
+      },
+      { "url": "<?php echo asset_url('weblog/js/blog.min.js'); ?>",
+        "options": {
+          "async": true,
+          "defer": false
+        }
+      },
+      { "url": "<?php echo asset_url('weblog/js/vendors.10b0b9cbacd5.js'); ?>",
+        "options": {
+          "async": true,
+          "defer": false
+        }
+      }
+    ]'></div>
+<script type="text/javascript">
+    var scripts = document.querySelector("#base-scripts").getAttribute('data-scripts');
+    scripts = JSON.parse(scripts);
+    scripts.forEach(function(scriptObj) {
+        var s = document.createElement('script');
+        s.async = scriptObj.options.async;
+        s.defer = scriptObj.options.defer;
+        s.src = scriptObj.url;
+        document.head.appendChild(s);
+    });
+</script>
+<!--[if gt IE 9]><!-->
+<!--<script async type="text/javascript" src="<?php echo asset_url('weblog/js/vendors.10b0b9cbacd5.js'); ?>"></script>-->
+<!--<![endif]-->
+
+<!-- <script src="https://use.fontawesome.com/bb892a51cd.js"></script> -->
+<link rel="stylesheet" href="<?php echo asset_url('third-party/fontello-5089ef83/css/fontello.css'); ?>">
+<!--[if lt IE 7]>
+    <link rel="stylesheet" href="<?php echo asset_url('third-party/fontello-5089ef83/css/fontello-ie7.css'); ?>">
+<![endif]-->

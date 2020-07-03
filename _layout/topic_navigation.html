@@ -1,0 +1,39 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+?>
+
+<!DOCTYPE html>
+
+    <?php
+    $data = [
+        'title'         => 'Topics | '.$user['full_name'],
+        'description'   => 'Explore topics by '.$user['full_name'],
+        'canonical_url' => weblog_url($user, $weblog, 'topics'),
+        'image_url'     => $user['profile_image_url'],
+    ];
+    $this->view('weblog/head', $data);
+    ?>
+
+    <body class="template-topicsnavigationpage" uni-component="externalLinks">
+        <div uni-component="timesince"></div>
+    
+        <div data-layer="{
+            'slug': 'topics',
+            'contentType': 'topics navigation page',
+        }"></div>
+
+        <?php $this->view('weblog/header'); ?>
+
+        <main uni-component="analytics"
+              uni-options="{
+                'trackingEvent': 'scroll'
+              }">
+
+            <div class="uni-blog-landing-navigation">                
+                <?php $this->view('weblog/topic_navigation_list'); ?>
+            </div>
+        </main>        
+
+        <?php $this->view('weblog/footer'); ?>
+    </body>
+</html>

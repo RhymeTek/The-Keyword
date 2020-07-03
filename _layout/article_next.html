@@ -1,0 +1,101 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+?>
+
+<!--related articles-->
+
+<?php
+if (!empty($post_next_list))
+{
+    ?>
+    <section class="uni-article-list uni-up-next">
+        <div class="uni-wrapper uni-wrapper-medium-full-width">
+            <h1>Up next</h1>
+
+            <nav uni-component="analytics"
+                 data-analytics="{
+                                 'category': 'article lead',
+                                 'action': 'up next',
+                                 'label': 'article: {slug}'
+                                 }"
+                 >
+                <?php
+                foreach ($post_next_list as $post_item)
+                {
+                    ?>
+                    <a href="<?php echo weblog_url($user, $weblog, $post_item['slug'].'~'.$post_item['post_id']); ?>">
+                        <div class="uni-article-item-header">
+                            <!--date-->
+                            <time datetime="<?php echo date('Y-m-d H:m', strtotime($post_item['published'])); ?>">
+                                <?php echo time_elapsed($post_item['published']); ?>
+                            </time>
+
+                            <!--Product brand-->
+                            <span>
+                                <?php echo service_name($post_item['service'], $post_item['kind']); ?>
+                            </span>
+                        </div>
+
+                        <?php
+                        if (!empty($post_item['thumbnail_url']))
+                        {
+                            ?>
+                            <figure class="uni-up-next">
+                                <picture>
+                                    <!-- <source media="(max-resolution: 1.5dppx)"
+                                            sizes="120px"
+                                            srcset="https://storage.googleapis.com/gweb-uniblog-publish-prod/images/20141021-Google_Edu_hero.2e16d0ba.fill-120x120.jpg 120w">
+                                
+                                    <source media="(min-resolution: 1.5dppx)"
+                                            sizes="240px"
+                                            srcset="https://storage.googleapis.com/gweb-uniblog-publish-prod/images/20141021-Google_Edu_hero.2e16d0ba.fill-240x240.jpg 240w">
+                                
+                                    <img src="https://storage.googleapis.com/gweb-uniblog-publish-prod/images/20141021-Google_Edu_hero.2e16d0ba.fill-240x240.jpg"
+                                     alt="20141021-Google Edu_hero.jpg"
+                                     sizes=" 120px,  240px"
+                                     srcset="https://storage.googleapis.com/gweb-uniblog-publish-prod/images/20141021-Google_Edu_hero.2e16d0ba.fill-120x120.jpg 120w, https://storage.googleapis.com/gweb-uniblog-publish-prod/images/20141021-Google_Edu_hero.2e16d0ba.fill-240x240.jpg 240w">
+                                     -->
+
+                                    <img src="<?php echo $post_item['thumbnail_url']; ?>">
+                                </picture>
+                            </figure>
+                            <?php
+                        }
+                        ?>
+
+                        <section>
+                            <?php
+                            if (!empty($post_item['title']))
+                            {
+                                ?>
+                                <h2><?php echo $post_item['title']; ?></h2>
+                                <?php
+                            }
+                            ?>
+
+                            <?php
+                            if (!empty($post_item['description']))
+                            {
+                                ?>
+                                <p><?php echo $post_item['description']; ?></p>
+                                <?php
+                            }
+                            ?>
+
+                            <?php
+                            if (empty($post_item['title']) AND empty($post_item['description']))
+                            {
+                                ?><h2>READ MORE</h2><?php
+                            }
+                            ?>
+                        </section>
+                    </a>
+                    <?php
+                }
+                ?>
+            </nav>
+        </div>
+    </section>
+    <?php
+}
+?>

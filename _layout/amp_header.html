@@ -1,0 +1,91 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+?>
+
+<amp-analytics type="googleanalytics">
+    <script type="application/json">
+        {
+            "requests": {
+              "pageviewWithVars": "${pageview}&cd01=${contentType}&cd02=${author}&cd03=${publishDate}&cd04=${primaryTag}&cd07=${slug}"
+            },
+            
+            "vars": {
+              "account": "UA-41643154-1"
+            },
+            "transport": {
+                "beacon": false,
+                "xhrpost": false
+            },
+            "extraUrlParams": {
+                "platform": "AMP",
+                "gtm": "GTM-T6L82N4"
+            },
+
+            "triggers": {
+            "trackPageview": {
+                "on": "visible",
+                "request": "pageviewWithVars",
+                "vars": {
+                    "slug": "<?php echo $post['item']['post_id']; ?>",
+                    "contentType": "article page",
+                    "author": "<?php echo $user['full_name']; ?>",
+                    "primaryTag": "Collection - <?php echo $post['item']['type']; ?>",
+                    "secondaryTags": "topics - <?php echo $post['item']['keywords']; ?>",
+                    "publishDate": "<?php echo date('Y-m-d|H:i', strtotime($post['item']['uploaded'])); ?>",
+                    "goLiveDateTime": "<?php echo date('Y-m-d|H:i', strtotime($post['item']['published'])); ?>",
+                    "ampdocUrl": "<?php echo weblog_url($user, $weblog, $post['item']['slug'].'~'.$post['item']['post_id'].'/amp'); ?>",
+                    "canonicalUrl": "<?php echo weblog_url($user, $weblog, $post['item']['slug'].'~'.$post['item']['post_id']); ?>"
+                }
+            },
+            "scrollPings": {
+                "on": "scroll",
+                "request": "event",
+                "scrollSpec": {
+                    "verticalBoundaries": [25, 50, 75, 100]
+                },
+                "vars": {
+                    "event": "page interaction",
+                    "eventCategory": "scroll tracking",
+                    "eventAction": "${verticalScrollBoundary}% viewed"
+                }
+            },
+            "trackClickOnHeader" : {
+                "on": "click",
+                "selector": "header a",
+                "request": "event",
+                "vars": {
+                    "event": "page interaction",
+                    "eventCategory": "navigation",
+                    "eventAction": "header",
+                    "eventLabel": "navlink: home"
+                }
+            }
+          }
+        }
+    </script>
+</amp-analytics>
+
+<header class="uni-header-content">
+    <div class="uni-header-wrapper">
+        <a href="<?php echo weblog_url($user, $weblog); ?>" target="_blank" class="uni-header-row uni-header-sub-menu">
+            <div class="uni-google-g-logo">
+                <figure>
+                    <amp-img layout="fixed"
+                             width="26"
+                             height="26"
+                             src="<?php echo asset_url('weblog/images/glyph.svg'); ?>"
+                             alt="Rime"></amp-img>
+                </figure>
+            </div>
+            <div class="uni-header-logo">
+                <figure>
+                    <amp-img layout="fixed"
+                             width="106"
+                             height="32"
+                             src="<?php echo asset_url('weblog/images/weblog-logo.svg'); ?>"
+                             alt="The Weblog"></amp-img>
+                </figure>
+            </div>
+        </a>
+    </div>
+</header>

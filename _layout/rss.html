@@ -1,0 +1,75 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+?>
+
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:cc="http://cyber.law.harvard.edu/rss/creativeCommonsRssModule.html" version="2.0">
+    <channel>
+        <title>
+            <![CDATA[ Stories by <?php echo $user['full_name']; ?> ]]>
+        </title>
+        <description>
+            <![CDATA[ Stories by <?php echo $user['full_name']; ?> ]]>
+        </description>
+        <link>
+            <?php echo weblog_url($user, $weblog); ?>
+        </link>
+        <image>
+            <url>
+                <?php echo $user['profile_image_url']; ?>
+            </url>
+            <title>Stories by <?php echo $user['full_name']; ?></title>
+            <link>
+                <?php echo weblog_url($user, $weblog); ?>
+            </link>
+        </image>
+        <generator>Rime</generator>
+        <lastBuildDate><?php echo date('D, j M Y H:i:s'); ?> GMT</lastBuildDate>
+        <atom:link href="<?php echo weblog_url($user, $weblog, 'rss'); ?>" rel="self" type="application/rss+xml"/>
+        <webMaster>
+            <![CDATA[ founders@rime.co ]]>
+        </webMaster>
+
+        <?php
+        if (!empty($post_list_latest['items'])) foreach ($post_list_latest['items'] as $post_item)
+        {
+            ?>
+            <item>
+                <title>
+                    <![CDATA[ <?php echo $post_item['title']; ?> ]]>
+                </title>
+                <link>
+                    <?php echo weblog_url($user, $weblog, $post_item['slug'].'~'.$post_item['post_id']); ?>
+                </link>
+                <guid><?php echo weblog_url($user, $weblog, $post_item['slug'].'~'.$post_item['post_id']); ?></guid>
+
+                <?php
+                if (!empty($post_item['keywords']))
+                {
+                    $keywords = explode(',', $post_item['keywords']);
+
+                    foreach ($keywords as $word)
+                    {
+                        ?>
+                        <category>
+                            <![CDATA[ <?php echo $word; ?> ]]>
+                        </category>
+                        <?php
+                    }
+                }
+                ?>
+                <dc:creator>
+                    <![CDATA[ <?php echo $user['full_name']; ?> ]]>
+                </dc:creator>
+                <pubDate><?php echo $post_item['published']; ?> GMT</pubDate>
+                <atom:updated><?php echo $post_item['updated']; ?></atom:updated>
+                <content:encoded>
+                    <![CDATA[
+                    <?php echo $post_item['description']; ?>
+                    ]]>
+                </content:encoded>
+            </item>
+            <?php
+        }
+        ?>
+    </channel>
+</rss>

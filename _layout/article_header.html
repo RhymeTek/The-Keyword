@@ -1,0 +1,280 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+?>
+
+<!--article header-->
+
+<?php
+$video_hero = FALSE;
+if (!empty($post['item']['player_url']) AND $post['item']['service'] == 'google' AND $post['item']['kind'] == 'channel') $video_hero = TRUE;
+
+if (!$video_hero)
+{
+    // if the post has more than on image and the thumbnail width is more than 1200
+    // place the thumbnail in the header
+    $post['item']['thumbnail_url'] = NULL;
+}
+?>
+
+<section class="uni-container uni-blog-article-header-container
+                <?php
+                if ($video_hero)
+                    echo 'uni-blog-article-with-video-hero';
+                elseif (!empty($post['item']['thumbnail_url']))
+                    echo 'uni-blog-article-with-hero';
+                ?>
+                "
+         <?php if ($video_hero) echo 'uni-component="videoHero"'; ?>
+    >
+
+    <?php
+    if ($video_hero)
+    {
+        ?>
+        <div class="uni-blog-article-hero">
+            <div class="hero-wrap">
+                <div class="uni-full-width uni-video-overlay-show"
+                     uni-component="video"
+                     uni-video-id="<?php echo $post['item']['x_post_id']; ?>"
+                     uni-block-index="video-hero"
+                     uni-options="{
+                                  'overlay': true,
+                                  'onStart':'uniblog.event.videoHero.onStart'
+                                  }">
+                    <div class="uni-video">
+                        <div id="uni-video-<?php echo $post['item']['x_post_id']; ?>-video-hero"></div>
+
+                        <!-- <iframe id="uni-video-<?php echo $post['item']['x_post_id']; ?>-video-hero" frameborder="0" allowfullscreen="1" title="YouTube video player" width="100%" height="100%" src="<?php echo $post['item']['player_url']; ?>"></iframe> -->
+
+                        <figure class="uni-video-key-frame">
+                            <picture>
+                            
+                                <source media="(max-width: 540px) and (max-resolution: 1.5dppx)"
+                                        sizes="540px"
+                                        srcset="<?php echo $post['item']['thumbnail_url']; ?> 540w">
+                            
+                                <source media="(max-width: 540px) and (min-resolution: 1.5dppx)"
+                                        sizes="1080px"
+                                        srcset="<?php echo $post['item']['thumbnail_url']; ?> 1080w">
+                            
+                                <source media="(max-width: 1000px) and (max-resolution: 1.5dppx)"
+                                        sizes="1000px"
+                                        srcset="<?php echo $post['item']['thumbnail_url']; ?> 1000w">
+                            
+                                <source media="(max-width: 1000px) and (min-resolution: 1.5dppx)"
+                                        sizes="2000px"
+                                        srcset="<?php echo $post['item']['thumbnail_url']; ?> 2000w">
+                            
+                                <source media="(max-resolution: 1.5dppx)"
+                                        sizes="1440px"
+                                        srcset="<?php echo $post['item']['thumbnail_url']; ?> 1440w">
+                            
+                                <source media="(min-resolution: 1.5dppx)"
+                                        sizes="2499px"
+                                        srcset="<?php echo $post['item']['thumbnail_url']; ?> 2499w">
+                        
+
+                                <img src="<?php echo $post['item']['thumbnail_url']; ?>"
+                                     alt=""
+                                     sizes="(max-width: 540px) 540px, (max-width: 540px) 1080px, (max-width: 1000px) 1000px, (max-width: 1000px) 2000px,  1440px,  2499px"
+                                     srcset="<?php echo $post['item']['thumbnail_url']; ?> 540w, <?php echo $post['item']['thumbnail_url']; ?> 1080w, <?php echo $post['item']['thumbnail_url']; ?> 1000w, <?php echo $post['item']['thumbnail_url']; ?> 2000w, <?php echo $post['item']['thumbnail_url']; ?> 1440w, <?php echo $post['item']['thumbnail_url']; ?> 2499w">
+
+                            </picture>
+                        </figure>
+
+                        <div class="uni-video-overlay"></div>
+
+                        <button class="uni-video-play-button u-video-play-small-button"
+                                aria-label="Play">
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php
+    }
+    elseif (!empty($post['item']['thumbnail_url']))
+    {
+        // if ($post['item']['thumbnail_width'] > 1200)
+        {
+            ?>
+            <div data-hero-style="[
+                '@media (max-width: 540px) {
+                    .responsive-background-image-4706 {
+                       background-image: url(<?php echo $post['item']['thumbnail_url']; ?>);
+                    }
+                }',
+                '@media (max-width: 540px) and (min-resolution: 1.5dppx),
+                 (max-width: 540px) and (-webkit-min-device-pixel-ratio: 1.5) {
+                    .responsive-background-image-4706 {
+                       background-image: url(<?php echo $post['item']['thumbnail_url']; ?>);
+                    }
+                }',
+                '@media (min-width: 541px) and (max-width: 1000px) {
+                    .responsive-background-image-4706 {
+                       background-image: url(<?php echo $post['item']['thumbnail_url']; ?>);
+                    }
+                }',
+                '@media (min-width: 541px) and (max-width: 1000px) and (min-resolution: 1.5dppx),
+                 (min-width: 541px) and (max-width: 1000px) and (-webkit-min-device-pixel-ratio: 1.5) {
+                    .responsive-background-image-4706 {
+                        background-image: url(<?php echo $post['item']['thumbnail_url']; ?>);
+                    }
+                }',
+                '@media (min-width: 1001px) {
+                    .responsive-background-image-4706 {
+                       background-image: url(<?php echo $post['item']['thumbnail_url']; ?>);
+                    }
+                }',
+                '@media (min-width: 1001px) and (min-resolution: 1.5dppx),
+                 (min-width: 1001px) and (-webkit-min-device-pixel-ratio: 1.5) {
+                    .responsive-background-image-4706 {
+                       background-image: url(<?php echo $post['item']['thumbnail_url']; ?>);
+                    }
+                }'
+            ]"></div>
+
+            <script type="text/javascript" src="<?php echo asset_url('weblog/js/article-hero-image.a9c19385e014.js'); ?>"></script>
+            <div class="uni-blog-article-hero">
+                <div class="hero-wrap hide-small">
+                    <div class="responsive-background-image-4706 hero-image parallax" aria-label="" uni-component="parallax"></div>
+                </div>
+
+                <div class="hero-wrap squared show-small">
+                    <div class="responsive-background-image-4706 hero-image" aria-label=""></div>
+                </div>
+            </div>
+            <?php
+        }
+    }
+    ?>
+
+    <!--article header content-->
+    <div class="uni-wrapper">
+        <div class="uni-content">
+            <div class="uni-blog-article-header-wrapper">
+                <div class="uni-blog-article-header"
+                     uni-component="analytics"
+                     data-analytics="{
+                                     'category': 'landing page lead',
+                                     'action': 'article tag',
+                                     'label': 'topic: {slug}'
+                                     }">
+
+                    <!--tag-->
+                    <a class="uni-blog-article-tag uni-inherit-style uni-link-active"
+                       href="<?php echo $post['item']['url']; ?>" target="_blank"
+                       >
+                        <?php echo service_name($post['item']['service'], $post['item']['kind']); ?>
+                    </a>
+
+                    <!--date-->
+                    <time datetime="<?php echo date('Y-m-d H:m', strtotime($post['item']['published'])); ?>" class="uni-blog-article-date">
+                        <?php echo date('M d, Y', strtotime($post['item']['published'])); ?>
+                    </time>
+                </div>
+                <div class="uni-blog-article-title">
+                    <h1 class="uni-responsive-text-1"><?php echo $post['item']['title']; ?></h1>
+                </div>
+            </div>
+
+            
+            <!-- Author avatar -->
+            <div class="uni-blog-article-authors
+                        <?php
+                        if (!empty($post['actor']['image_url']))
+                        {
+                            // uni-author-image-none, uni-author-image-single, uni-author-image-both, 
+                            // uni-author-image-odd, uni-author-image-even
+                            echo 'uni-author-image-even';
+                        }
+                        else echo 'uni-author-image-none';
+                        ?>
+                        "
+                >
+
+                <?php
+                if (!empty($post['item']['author_x_actor_id']))
+                {
+                    ?>
+                    <span><?php echo $post['item']['author_relation'] ?></span>
+                    <?php
+                }
+                ?>
+
+                <div>
+                    <?php
+                    if (!empty($post['item']['author_x_actor_id']))
+                    {
+                        ?>
+                        <div class="uni-byline">
+                            <address>
+                                <span><?php echo $post['item']['author_name'] ?></span>
+
+                                <?php
+                                if (!empty($post['item']['author_username']))
+                                {
+                                    ?>
+                                    <div>
+                                        <span class="uni-byline-job"><?php echo $post['item']['author_username']; ?></span>
+                                    </div>
+                                    <?php
+                                }
+                                ?>
+                            </address>
+                        </div>
+                        <?php
+                    }
+                    ?>
+
+                    <div class="uni-byline">
+                        <?php
+                        if (!empty($post['actor']['image_url']))
+                        {
+                            ?>
+                            <figure class="">
+                                <picture>
+                                    <!-- <source media="(max-resolution: 1.5dppx)"
+                                            sizes="60px"
+                                            srcset="https://storage.googleapis.com/gweb-uniblog-publish-prod/images/IMG_1594.2e16d0ba.fill-60x60.jpg 60w">
+                                
+                                    <source media="(min-resolution: 1.5dppx)"
+                                            sizes="120px"
+                                            srcset="https://storage.googleapis.com/gweb-uniblog-publish-prod/images/IMG_1594.2e16d0ba.fill-120x120.jpg 120w">
+
+                                    <img src="https://storage.googleapis.com/gweb-uniblog-publish-prod/images/IMG_1594.2e16d0ba.fill-120x120.jpg"
+                                         alt="JingyuCui"
+                                         sizes=" 60px, 120px"
+                                         srcset="https://storage.googleapis.com/gweb-uniblog-publish-prod/images/IMG_1594.2e16d0ba.fill-60x60.jpg 60w, https://storage.googleapis.com/gweb-uniblog-publish-prod/images/IMG_1594.2e16d0ba.fill-120x120.jpg 120w"
+                                         style="opacity: 1"> -->
+
+                                    <img src="<?php echo $post['actor']['image_url']; ?>"
+                                         alt="<?php echo $post['actor']['full_name']; ?>"
+                                         >
+                                </picture>
+                            </figure>
+                            <?php
+                        }
+                        ?>
+
+                        <address>
+                            <span><?php echo $post['actor']['full_name']; ?></span>
+                            <div>
+                                <?php
+                                if (!empty($post['actor']['username']))
+                                {
+                                    ?>
+                                    <span class="uni-byline-job"><?php echo $post['actor']['username']; ?></span>
+                                    <?php
+                                }
+                                ?>
+                                <!-- <span class="uni-byline-company"><?php echo $post['actor']['description']; ?></span> -->
+                            </div>
+                        </address>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>

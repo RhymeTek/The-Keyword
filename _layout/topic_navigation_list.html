@@ -1,0 +1,92 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+?>
+
+<!--products tertiary list-->
+
+<?php
+if (!empty($post_topic_list))
+{
+    $post_topic_list_sorted = [];
+
+    foreach ($post_topic_list as $topic)
+    {
+        $post_topic_list_sorted[ strtolower($topic['word']) ] = $topic;
+    }
+    ksort($post_topic_list_sorted);
+
+    $post_topic_list = $post_topic_list_sorted;
+}
+?>
+
+<section class="uni-blog-landing-tertiary-list"
+         uni-component="analytics"
+         data-analytics="{
+                         'category': 'landing page lead',
+                         'action': 'topics'
+                         }">
+    <div class="uni-wrapper">
+        <div class="uni-blog-landing-tertiary-list-content">
+            
+            <h1>Topics</h1>
+
+            <nav class="show-large">
+                <?php
+                if (!empty($post_topic_list))
+                {
+                    $chunk_size = ceil( count($post_topic_list) / 3);
+                    $post_topic_list_large = array_chunk($post_topic_list, $chunk_size);
+
+                    foreach ($post_topic_list_large as $topic_list)
+                    {
+                        ?>
+                        <div>
+                            <?php
+                            foreach ($topic_list as $topic)
+                            {
+                                ?>
+                                <a href="<?php echo weblog_url($user, $weblog, 'topics/'.$topic['word']); ?>"
+                                   data-analytics="{'label': '<?php echo $topic['word']; ?>">
+                                    <span><?php echo $topic['word']; ?></span>
+                                </a>
+                                <?php
+                            }
+                            ?>
+                        </div>
+                        <?php
+                    }
+                }
+                ?>
+            </nav>
+
+            <nav class="hide-large">
+                <?php
+                if (!empty($post_topic_list))
+                {
+                    $chunk_size = ceil( count($post_topic_list) / 2);
+                    $post_topic_list_large = array_chunk($post_topic_list, $chunk_size);
+
+                    foreach ($post_topic_list_large as $topic_list)
+                    {
+                        ?>
+                        <div>
+                            <?php
+                            foreach ($topic_list as $topic)
+                            {
+                                ?>
+                                <a href="<?php echo weblog_url($user, $weblog, 'topics/'.$topic['word']); ?>"
+                                   data-analytics="{'label': '<?php echo $topic['word']; ?>">
+                                    <span><?php echo $topic['word']; ?></span>
+                                </a>
+                                <?php
+                            }
+                            ?>
+                        </div>
+                        <?php
+                    }
+                }
+                ?>
+            </nav>
+        </div>
+    </div>
+</section>

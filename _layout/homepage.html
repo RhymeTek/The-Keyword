@@ -1,0 +1,88 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+?>
+
+<!DOCTYPE html>
+
+    <?php
+    $data = [
+        'title'         => $user['full_name'].' | '.$user['username'],
+        'description'   => $user['bio'],
+        'canonical_url' => weblog_url($user, $weblog),
+        'image_url'     => $user['profile_image_url'],
+    ];
+    $this->view('weblog/head', $data);
+    ?>
+
+    <body class="template-homepage" uni-component="externalLinks">
+        <div uni-component="timesince"></div>
+
+        <div data-layer="{
+            'slug': 'home',
+            'contentType': 'homepage',
+        }"></div>
+
+        <?php $this->view('weblog/header'); ?>
+
+        <main uni-component="analytics"
+              uni-options="{
+                'trackingEvent': 'scroll'
+              }">
+
+            <article class="uni-blog-landing">
+                <?php
+                if (!empty($post_list_popular['items'][0]))
+                {
+                    $this->view('weblog/homepage_header', [ 'post_item' => $post_list_popular['items'][0] ]);
+                    unset($post_list_popular['items'][0]);
+                }
+                ?>
+
+                <?php $this->view('weblog/latest_stories_grid', [ 'api_endpoint' => 'all/'.$user['username'] ]); ?>
+
+                <?php
+                if (!empty($post_list_popular['items']))
+                {
+                    $post_list = [];
+                    foreach ($post_list_popular['items'] as $post_item) $post_list[] = $post_item;
+
+                    $this->view('weblog/top_stories', [ 'post_list' => $post_list ]);
+                }
+                ?>
+
+                <div id="landing-components" data-scripts='[
+                      { "url": "https://apis.google.com/js/platform.js",
+                        "options": {
+                            "async": true,
+                            "defer": true
+                        }
+                      },
+                      { "url": "<?php echo asset_url('weblog/js/landing-components.8260c8728326.js'); ?>",
+                        "options": {
+                            "async": false,
+                            "defer": false
+                        }
+                      }
+                    ]'></div>
+                <script type="text/javascript">
+                    var scripts = document.querySelector("#landing-components").getAttribute('data-scripts');
+                    scripts = JSON.parse(scripts);
+                    scripts.forEach(function(scriptObj) {
+                      var s = document.createElement('script');
+                      s.async = scriptObj.options.async;
+                      s.defer = scriptObj.options.defer;
+                      s.src = scriptObj.url;
+                      document.head.appendChild(s);
+                    });
+                </script>
+                <!--<script src="https://apis.google.com/js/platform.js" async defer></script>-->
+                <!--<script type="text/javascript" src="<?php echo asset_url('weblog/js/landing-components.8260c8728326.js'); ?>"></script>-->
+
+                <?php $this->view('weblog/latest_stories_list', [ 'api_endpoint' => 'all/'.$user['username'] ]); ?>
+            </article>
+        </main>
+
+
+        <?php $this->view('weblog/footer'); ?>
+    </body>
+</html>

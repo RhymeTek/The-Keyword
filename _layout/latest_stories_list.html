@@ -1,0 +1,45 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+?>
+
+<section class="uni-article-list uni-latest-articles uni-load-more active"
+         uni-component="loadMore"
+         uni-options="{
+                          'endpoint':'<?php echo weblog_api_endpoint($user, $weblog, 'api/v1/pages/'.$api_endpoint); ?>',
+                          'paginate_first_by':5,
+                          'paginate_by':10,
+                          'next_page':1,
+                          'offset':0,
+                          'load_first_page': true
+                      }"
+         >
+    <div class="uni-wrapper uni-wrapper-medium-full-width">
+
+        <h1>All stories</h1>
+            
+        <nav
+         uni-component="analytics"
+         uni-options="{'update': 'uniblog.event.loadMore.onDataIsReady'}"
+         data-analytics="{
+                         'category': 'article lead',
+                         'action': 'all the latest',
+                         'label': 'article: {slug}'
+                         }"
+         >
+        </nav>
+    </div>
+
+    <div class="uni-load-more-nav">
+        <button class="uni-load-more-button"
+                uni-component="analytics"
+                data-analytics="{
+                                'category': 'interaction',
+                                'action': 'load more stories'
+                                }"
+                >
+            <img src="<?php echo asset_url('weblog/images/loader.2a19596f729d.gif'); ?>" alt="Loading more stories"/>
+            <span>Load more stories</span>
+            <div class="uni-load-more-transition"></div>
+        </button>
+    </div>
+</section>

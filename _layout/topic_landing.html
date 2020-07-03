@@ -1,0 +1,45 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+?>
+
+<!DOCTYPE html>
+
+    <?php
+    $data = [
+        'title'         => $word.' | '.$user['full_name'],
+        'description'   => 'Explore '.$word.' and more topics by '.$user['full_name'],
+        'canonical_url' => weblog_url($user, $weblog, 'topics/'.$word),
+        'image_url'     => $user['profile_image_url'],
+    ];
+    $this->view('weblog/head', $data);
+    ?>
+
+    <body class="template-topiclandingpage" uni-component="externalLinks">
+        <div uni-component="timesince"></div>
+
+        <div data-layer="{
+            'slug': '<?php echo $word; ?>',
+            'contentType': 'topic landing page',
+            'tags': 'topic - <?php echo $word; ?>',
+        }"></div>
+        
+        <?php $this->view('weblog/header'); ?>
+
+        <main uni-component="analytics"
+              uni-options="{
+                'trackingEvent': 'scroll'
+              }">
+
+            <article class="uni-blog-landing">
+                <!--article header-->
+                <section class="uni-container uni-blog-landing-header-container">
+                    <?php $this->view('weblog/collection_landing_hero', [ 'title' => $word, 'rss' => 'topics/'.$word.'/rss' ]); ?>
+                </section>
+
+                <?php $this->view('weblog/latest_stories_list', [ 'api_endpoint' => 'topic/'.$user['username'].'/'.$word ]); ?>
+            </article>
+        </main>
+
+        <?php $this->view('weblog/footer'); ?>
+    </body>
+</html>

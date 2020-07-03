@@ -1,0 +1,41 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+?>
+
+<!DOCTYPE html>
+
+    <?php
+    $data = [
+        'title'         => 'Collections | '.$user['full_name'],
+        'description'   => 'Explore collections by '.$user['full_name'],
+        'canonical_url' => weblog_url($user, $weblog, 'collections'),
+        'image_url'     => $user['profile_image_url'],
+    ];
+    $this->view('weblog/head', $data);
+    ?>
+
+    <body class="template-collectionsnavigationpage" uni-component="externalLinks">
+        <div uni-component="timesince"></div>
+
+        <div data-layer="{
+            'slug': 'collections',
+            'contentType': 'collections navigation page',
+        }"></div>
+        
+        <?php $this->view('weblog/header'); ?>
+
+        <main uni-component="analytics"
+              uni-options="{
+                'trackingEvent': 'scroll'
+              }">
+
+            <div class="uni-blog-landing-navigation">
+                <?php $this->view('weblog/collection_navigation_list'); ?>
+
+                <?php $this->view('weblog/latest_stories_grid', [ 'api_endpoint' => 'all/'.$user['username'] ]); ?>
+            </div>
+        </main>        
+
+        <?php $this->view('weblog/footer'); ?>
+    </body>
+</html>

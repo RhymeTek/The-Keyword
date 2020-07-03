@@ -1,0 +1,355 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+?>
+
+<!--article body-->
+
+<?php
+$html = '';
+$is_article = FALSE;
+
+$paragraph_count = 0;
+$word_count = 0;
+
+// @bug Article: HTML manipulation #264
+
+// http://simplehtmldom.sourceforge.net/manual_api.htm
+
+function is_paragraph_tag($tag='')
+{
+    return $tag == 'p'
+        OR $tag == 'h1'
+        OR $tag == 'h2'
+        OR $tag == 'h3'
+        OR $tag == 'h4'
+        OR $tag == 'h5'
+        OR $tag == 'h6'
+        OR $tag == 'table'
+        OR $tag == 'pre'
+        OR $tag == 'ol'
+        OR $tag == 'ul';
+}
+
+if (!empty($post['item']['body']))
+{
+    $dom = $this->lib_simple_html_dom_parser->str_get_html($post['item']['body']);
+
+    $open_tag = NULL;
+    $gallery_figure_count = 0;
+    foreach ($dom->childNodes() as $node)
+    {
+        $next_sibling_tag = NULL;
+        $next_sibling = $node->next_sibling();
+        if (!empty($next_sibling)) $next_sibling_tag = $next_sibling->tag;
+
+        // Article:
+        //  atleast 3 paragraph and 300 word count
+        if ($node->tag == 'p')
+        {
+            $paragraph_count += 1;
+            $word_count += str_word_count($node->plaintext);
+        }
+
+        // Paragraph:
+        //  <div class="uni-paragraph"><div class="rich-text">
+        //      <p></p>
+        //  </div></div>
+        if (is_null($open_tag) AND is_paragraph_tag($node->tag))
+        {
+            $open_tag = 'paragraph';
+            $html .= '<div class="uni-paragraph"><div class="rich-text">';
+        }
+
+        if (is_paragraph_tag($node->tag))
+        {
+            $html .= $node->outertext();
+        }
+
+        if ($open_tag == 'paragraph' AND ($next_sibling_tag == NULL OR !is_paragraph_tag($next_sibling_tag)))
+        {
+            $open_tag = NULL;
+            $html .= '</div></div>';
+        }
+
+        // Quote:
+        //  <div class="uni-pull-quote"><div class="quote-content">
+        //      <q></q>
+        //      <cite>
+        //          <span></span>
+        //          <span></span>
+        //      </cite>
+        //  </div>
+        //      <figure><picture><img></picture></figure>
+        //  </div>
+        if ($node->tag == 'blockquote')
+        {
+            $html .= '<div class="uni-pull-quote">';
+            $html .= '<div class="quote-content">';
+
+            foreach ($node->childNodes() as $child_node)
+            {
+                if ($child_node->tag == 'p')
+                    $html .= '<q>'.$child_node->innertext().'</q>';
+
+                if ($child_node->tag == 'footer')
+                    $html .= '<cite>'.$child_node->innertext().'</cite>';
+            }
+
+            $html .= '</div>';
+
+            foreach ($node->childNodes() as $child_node)
+            {
+                if ($child_node->tag == 'figure')
+                    $html .= '<figure><picture>'.$child_node->innertext().'</picture></figure>';
+            }
+            $html .= '</div>';
+        }
+
+        // Gallery:
+        //  <div class="uni-full-width uni-carousel" uni-component="carousel">
+        //      <div class="uni-carousel-container wrap">
+        //          <figure>
+        //              <div class="uni-carousel-slide-content">
+        //                  <div class="uni-carousel-image">
+        //                      <source media sizes srcset />
+        //                      <img src alt sizes srcset />
+        //                  </div>
+        //                  <figcaption>
+        //                      <div class="rich-text">
+        //                          <p></p>
+        //                      </div>
+        //                  </figcaption>
+        //              </div>
+        //          </figure>
+        //      </div>
+        //  </div>
+        if (is_null($open_tag) AND $node->tag == 'figure' AND $next_sibling_tag == 'figure')
+        {
+            $open_tag = 'gallery';
+            $html .= '<div class="uni-full-width uni-carousel" uni-component="carousel"><div class="uni-carousel-container wrap">';
+        }
+
+        if ($node->tag == 'figure')
+        {
+            if ($open_tag == 'gallery')
+            {
+                $gallery_figure_count += 1;
+                $html .= '<figure><div class="uni-carousel-slide-content">';
+
+                foreach ($node->childNodes() as $child_node)
+                {
+                    if ($child_node->tag == 'img')
+                    {
+                        $html .= '<div class="uni-carousel-image">';
+                        $html .= $child_node->outertext();
+                        $html .= '</div>';
+                    }
+
+                    if ($child_node->tag == 'figcaption')
+                    {
+                        $html .= '<figcaption><div class="rich-text"><p>';
+                        $html .= $child_node->innertext();
+                        $html .= '</p></div></figcaption>';
+                    }
+                }
+
+                $html .= '</div></figure>';
+            }
+            else
+            {
+                // Image:
+                //  <div class="uni-full-width"> "uni-half-width align-right"
+                //      <figure>
+                //          <source media sizes srcset />
+                //          <img src alt sizes srcset />
+                //          <figcaption>
+                //              <div class="rich-text">
+                //                  <p></p>
+                //              </div>
+                //          </figcaption>
+                //      </figure>
+                //  </div>
+                $html .= '<div class="uni-full-width"><figure>';
+
+                foreach ($node->childNodes() as $child_node)
+                {
+                    if ($child_node->tag == 'img')
+                        $html .= $child_node->outertext();
+
+                    if ($child_node->tag == 'figcaption')
+                    {
+                        $html .= '<figcaption><div class="rich-text"><p>';
+                        $html .= $child_node->innertext();
+                        $html .= '</p></div></figcaption>';
+                    }
+                }
+                
+                $html .= '</figure></div>';
+            }
+        }
+
+        if ($open_tag == 'gallery' AND $next_sibling_tag != 'figure')
+        {
+            $open_tag = NULL;
+
+            $html .= '</div>';
+
+            $html .= '<div class="uni-carousel-arrows-container hide-tablet hide-mobile">
+                        <button class="uni-carousel-left-arrow" aria-label="left arrow"></button>
+                        <button class="uni-carousel-right-arrow" aria-label="right arrow"></button>
+                      </div>';
+
+            $html .= '<nav>';
+
+            for ($i=0; $i < $gallery_figure_count; $i++)
+            {
+                $html .= '<button aria-label="slide '.($i+1).'"></button>';
+                $html .= "\n"; // maintains spacing
+            }
+
+            $html .= '</nav>';
+            $html .= '</div>';
+
+            $gallery_figure_count = 0;
+        }
+
+        // Video:
+        //  <div class="uni-full-width">
+        //      <video controls autoplay style="max-width: 500px; width: 100%; height: auto;">
+        //          <source src="" type="video/mp4">
+        //      </video>
+        //  </div>
+        if ($node->tag == 'video')
+        {
+            $attr = $node->getAllAttributes();
+
+            $width = NULL;
+            if (!empty($attr['width'])) { $width = $attr['width']; unset($attr['width']); }
+
+            if (empty($width)) $width = 500;
+
+            $height = NULL;
+            if (!empty($attr['height'])) { $height = $attr['height']; unset($attr['height']); }
+
+            $html .= '<div class="uni-full-width">';
+            $html .= '<video ';
+
+            foreach ($attr as $key => $value)
+            {
+                $html .= $key.( $value === TRUE ? '' : '="'.$value.'"' ).' ';
+            }
+
+            // https://www.w3schools.com/css/css_rwd_videos.asp
+            $html .= 'style="max-width: '.$width.'px; width: 100%; height: auto;"';
+
+            $html .= '>';
+            $html .= $node->innertext();
+            $html .= '</video>';
+            $html .= '</div>';
+        }
+
+        // iFrame:
+        //  <div class="uni-full-width">
+        //      <div class="uni-video">
+        //          <iframe frameborder="0" allowfullscreen="1" title="" width="100%" height="100%" src="">
+        //          </iframe>
+        //      </div>
+        //      <h2 class="show-small"></h2>
+        //  </div>
+        if ($node->tag == 'iframe')
+        {
+            $attr = $node->getAllAttributes();
+
+            $html .= '<div class="uni-full-width"><div class="uni-video">';
+            $html .= '<iframe frameborder="0" allowfullscreen="1" title="" width="100%" height="100%" src="'.$attr['src'].'"></iframe>';
+            $html .= '</div></div>';
+        }
+    }
+
+    unset($dom);
+}
+
+if ($paragraph_count >= 3 AND $word_count >= 300) $is_article = TRUE;
+?>
+
+<section class="uni-container" uni-component="selectionSharer">
+    <div class="uni-wrapper">
+
+        <!--article body content-->
+
+        <div class="uni-content uni-blog-article-container">
+
+            <!--article content-->
+
+            <!--article text-->
+
+            <div class="uni-blog-article-content" uni-component="tombstone">
+                <div <?php if ($is_article) echo 'uni-component="dropcap"';?> >
+                    <?php echo $html; ?>
+
+                    <?php
+                    if (!empty($post['item']['venue']))
+                    {
+                        ?>
+                        <!-- Venue -->
+                        <div class="uni-paragraph">
+                            <div class="rich-text">
+                                <p>Location: <?php echo $post['item']['venue']; ?></p>
+                            </div>
+                        </div>
+                        <?php
+                    }
+                    ?>
+                    
+                    <?php
+                    if (!empty($post_cross_list))
+                    {
+                        $this->config->load('service', TRUE);
+                        $service_info = $this->config->item('info', 'service');
+                        ?>
+                        <div class="uni-paragraph">
+                            <div class="rich-text">
+                                <p>
+                                    Cross-posts on 
+
+                                    <?php
+                                    foreach ($post_cross_list as $cross_post)
+                                    {
+                                        ?>
+                                        <a href="<?php echo $cross_post['url']; ?>" target="_blank"><?php echo $service_info[ $cross_post['service'] ]['kind'][ $cross_post['kind'] ]['name']; ?></a>
+                                        <?php
+                                    }
+                                    ?>
+                                </p>
+                            </div>
+                        </div>
+                        <?php
+                    }
+                    ?>
+                </div>
+            </div>
+
+            <?php $this->view('weblog/article_footer'); ?>
+        </div>
+    </div>
+
+    <?php
+    $post_url = weblog_url($user, $weblog, $post['item']['slug'].'~'.$post['item']['post_id']);
+    $post_url_encoded = urlencode($post_url);
+    ?>
+    <nav class="uni-selection-sharer">
+        <a data-link="https://plus.google.com/share?url=<?php echo $post_url_encoded; ?>"
+           class="uni-icon uni-icon-google"
+           aria-label="Share on Google Plus">
+        </a>
+        <a data-link="https://twitter.com/intent/tweet?text={ $text }%20%40google&url=<?php echo $post_url_encoded; ?>"
+           class="uni-icon uni-icon-twitter"
+           aria-label="Share on Twitter">
+        </a>
+        <a data-link="https://www.facebook.com/sharer/sharer.php?u=<?php echo $post_url_encoded; ?>&quote={ $text }"
+           class="uni-icon uni-icon-facebook"
+           aria-label="Share on Facebook">
+        </a>
+        <i></i>
+    </nav>
+</section>

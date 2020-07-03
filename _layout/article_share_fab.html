@@ -1,0 +1,50 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+?>
+
+<div class="fab" uni-component="fab">
+    <button tabindex="0" class="uni-fab-toggle"
+            aria-label="Toggle social share buttons">
+        <span class="uni-icon uni-icon-share"></span>
+    </button>
+    <?php
+    $post_url = weblog_url($user, $weblog, $post['item']['slug'].'~'.$post['item']['post_id']);
+    $post_url_encoded = urlencode($post_url);
+
+    $article_tag = $user['username'].'/'.$post['item']['slug'].'~'.$post['item']['post_id'];
+    ?>
+    <nav uni-component="analytics"
+         data-analytics="{
+                         'category': 'social',
+                         'action': 'share'
+                         }">
+        <a data-link="https://plus.google.com/share?url=<?php echo $post_url_encoded; ?>"
+           class="social-link google"
+           tabindex="0"
+           aria-label="Share on Google Plus"
+           data-analytics="{'label': 'social network: google +|article: <?php echo $article_tag; ?>'}">
+            <span class="uni-icon uni-icon-google"></span>
+        </a>
+        <a data-link="https://twitter.com/intent/tweet?text=<?php echo urlencode($post['item']['title']); ?>&url=<?php echo $post_url_encoded; ?>"
+           class="social-link twitter"
+           tabindex="0"
+           aria-label="Share on Twitter"
+           data-analytics="{'label': 'social network: twitter|article: <?php echo $article_tag; ?>'}">
+            <span class="uni-icon uni-icon-twitter"></span>
+        </a>
+        <a data-link="https://www.facebook.com/sharer/sharer.php?u=<?php echo $post_url_encoded; ?>"
+           class="social-link facebook"
+           tabindex="0"
+           aria-label="Share on Facebook"
+           data-analytics="{'label': 'social network: facebook|article: <?php echo $article_tag; ?>'}">
+            <span class="uni-icon uni-icon-facebook"></span>
+        </a>
+        <a data-link="https://www.linkedin.com/shareArticle?mini=true&url=<?php echo $post_url_encoded; ?>&title=<?php echo urlencode($post['item']['title']); ?>"
+           class="social-link linkedin"
+           tabindex="0"
+           aria-label="Share on LinkedIn"
+           data-analytics="{'label': 'social network: linkedin|article: <?php echo $article_tag; ?>'}">
+            <span class="uni-icon uni-icon-linkedin"></span>
+        </a>
+    </nav>
+</div>
